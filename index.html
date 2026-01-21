@@ -12,21 +12,33 @@ web page and include your name as author.
     <style>
         body{
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            background-color:ivory;
         }
         #header{
+            background-color: black;
+            margin-bottom: -20px;
             text-align: center;
         }
         #container{
-            background-color:black;
+            background-color:rgb(212, 212, 255);
             color:white;
         }
         h1{
             background-color:honeydew;
             color:black;
             font-family:'Times New Roman', Times, serif;
+            text-align: center;
+
+        }
+        h2{
+            color:black;
+            font-size: 20px;
         }
         #logo{
-            width: 200px;
+            width: 30%;
+        }
+        #website{
+            width: 70px;
         }
         a.navlink {
             padding: 17px;
@@ -44,47 +56,48 @@ web page and include your name as author.
             width:27%;
             margin: 7px;
             text-align: center;
+            justify-content: space-evenly;
         }
         #footer{
-            padding: 17px;
-            border-radius: 17px;
-            background-color:indigo;
-            width:27%;
-            margin: 7px;
-            text-align: center;
+            background-color:darkblue;
+            color:aliceblue;
         }
         #nav{
             display:flex;
             text-align: center;
-            justify-content: space-evenly;
+            justify-content: space-between;
         }
-        #blank1{
-            color: black;
-        }
-        #blank2{
-            color: black;
+        @media (min-width:700px){
+            #logo{
+                width:20%
+            }
+            h1{
+                font-size: 177%;
+            }
         }
     </style>
 </head>
 
 
 <body>
+    <div id="header">
+        <img id="logo" src="Logo/KARZ_inc_Background_deleted.png">
+        <h1>KARZ inc.</h1>
+    </div>
     <div id="container">
-        <div id="header">
-            <img id="logo" src="Logo/KARZ_inc_Background_deleted.png">
-            <h1>KARZ inc.</h1>
-        </div>
+        <h2>Welcome to KARZ inc.</h2>
         <div id="nav">
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/about.html">About Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/project.html">Project Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/showcase.html">Showcase Page</a>
         </div>
-        <div id="blank1">
-            <h3>|</h3>
-        </div>
         <div id="content"> TODO </div>
-        <div id="blank2">|</div>
-        <div id="footer"> TODO </div>
+        <a href="https://www.mcmaster.ca/" target="_blank">
+            <img id="website" src="Logo/McMaster_University_logo.svg.png">
+        </a>
+        <div id="footer">
+            &copy; 2026 KARZ inc. / McMaster University
+        </div>
     </div>
 </body>
 
