@@ -10,68 +10,86 @@ web page and include your name as author.
     <meta name="viewport" content="width=device-width">
     <title>KARZ inc.</title>
     <style>
-        body{
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            background-color:ivory;
+        body {
+            font-family: unset;
+            background-color: ivory;
         }
-        #header{
-            background-color: black;
+
+        #header {
+            display: flex;
+            background-color: #EDEDE9;
             margin-bottom: -20px;
             text-align: center;
         }
-        #container{
-            background-color:rgb(212, 212, 255);
-            color:white;
+
+        #container {
+            color: #D6CCC2;
         }
-        h1{
-            background-color:honeydew;
-            color:black;
-            font-family:'Times New Roman', Times, serif;
+
+        h1 {
+            text-align: center;
+            padding-top: 50px;
+            color: #81b29a;
+            font-family: unset;
             text-align: center;
 
         }
-        h2{
-            color:black;
+
+        h2 {
+            color: black;
             font-size: 20px;
         }
-        #logo{
+
+        #logo {
             width: 30%;
         }
-        #website{
+
+        #website {
             width: 70px;
         }
+
+        #nav {
+            background-color: #588b8b;
+            padding: 20px;
+        }
+
         a.navlink {
             padding: 17px;
             border-radius: 17px;
-            background-color:indigo;
-            color:aliceblue;
-            width:27%;
-            margin:7px;
+            background-color: #81b29a;
+            color: #EDEDE9;
+            width: 27%;
+            margin: 7px;
             text-align: center;
         }
-        #content{
+
+        #content {
             padding: 17px;
             border-radius: 17px;
-            background-color:indigo;
-            width:27%;
+            width: 27%;
             margin: 7px;
             text-align: center;
             justify-content: space-evenly;
         }
-        #footer{
-            background-color:darkblue;
-            color:aliceblue;
+
+        #footer {
+            font-family: unset;
+            background-color: #F5EBE0;
+            color: #81b29a;
         }
-        #nav{
-            display:flex;
+
+        #nav {
+            display: flex;
             text-align: center;
             justify-content: space-between;
         }
-        @media (min-width:700px){
-            #logo{
-                width:20%
+
+        @media (min-width:700px) {
+            #logo {
+                width: 20%
             }
-            h1{
+
+            h1 {
                 font-size: 177%;
             }
         }
@@ -85,15 +103,13 @@ web page and include your name as author.
         <h1>KARZ inc.</h1>
     </div>
     <div id="container">
-        <h2>Welcome to KARZ inc.</h2>
         <div id="nav">
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/about.html">About Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/project.html">Project Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/showcase.html">Showcase Page</a>
         </div>
-        <div id="content"> TODO </div>
         <a href="https://www.mcmaster.ca/" target="_blank">
-            <img id="website" src="Logo/McMaster_University_logo.svg.png">
+
         </a>
         <div id="footer">
             &copy; 2026 KARZ inc. / McMaster University
