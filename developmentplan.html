@@ -1,411 +1,254 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Development Plan</title>
-    <link rel="stylesheet" href="css\simpleRoundStyle.css"></head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Development Plan - KARZ inc.</title>
+    <style>
+        body {
+            font-family: unset;
+            background-color: ivory;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            display: flex;
+            align-items: center;
+            background-color: #EDEDE9;
+            margin-bottom: -20px;
+            text-align: center;
+            padding: 10px 20px;
+        }
+
+        #container {
+            color: #D6CCC2;
+        }
+
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+            color: #81b29a;
+            font-family: unset;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: black;
+            font-size: 20px;
+        }
+
+        #logo {
+            width: 30%;
+            max-width: 180px;
+            height: auto;
+        }
+
+        #website {
+            width: 70px;
+        }
+
+        #nav {
+            background-color: #588b8b;
+            padding: 20px;
+            display: flex;
+            text-align: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        a.navlink {
+            padding: 17px;
+            border-radius: 17px;
+            background-color: #81b29a;
+            color: #EDEDE9;
+            width: 18%;
+            min-width: 140px;
+            margin: 7px;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        #content {
+            padding: 30px;
+            color: black;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: #F5EBE0;
+            border-radius: 20px;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        #footer {
+            font-family: unset;
+            background-color: #F5EBE0;
+            color: #81b29a;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        iframe {
+            border: none;
+            border-radius: 10px;
+        }
+
+        @media (min-width:700px) {
+            #logo {
+                width: 20%;
+            }
+
+            h1 {
+                font-size: 177%;
+            }
+        }
+
+        @media (max-width:700px) {
+            #header {
+                flex-direction: column;
+            }
+
+            #nav {
+                justify-content: center;
+            }
+
+            a.navlink {
+                width: 90%;
+            }
+
+            #content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
-<body class="flex">
-    <h1>
-        KARZ Projects
-    </h1>
-    <div class="line"></div>
-    <div class="textbox">
-        <h2>SyncSpace Development Plan</h2>
-        <p>1. Names</p>
-        <p>- CARZ inc</p>
-        <p>     - Taewoo Kim / Marcus Rotaru / Mazen Anklis / Erfan Zamani</p>
-        <p>- The name and organizaitonal affiliation of client</p>
-        <p>     - Name: Henry Moore / - Org Affiliation: McMaster Student</p>
 
-        <p>-----------------------------------------------------------------------------------</p>
+<body>
+    <div id="header">
+        <img id="logo" src="Logo/KARZ_inc_Background_deleted.png" alt="KARZ inc. logo">
+        <h1>KARZ inc.</h1>
+    </div>
 
-        <p>2. Purpose</p>
-        <p>- This app is designed to help students manage their own schedules and those of their friends. It supports not only personal schedules but also schedule sharing and collaboration.</p>
-        <p>- In the initial client report from week 4, the client needed an intuitive scheduling tool that would allow students to easily view each other's schedules and their own. Specifically, the client wanted a calendar system that was accessible on both mobile and computer, with an uncomplicated interface and a clear visual structure.</p>
-        <p>- To meet these needs, SyncSpace is designed to manage personal accounts through a login system and share calendars with groups of friends. It also offers a day view feature that allows users to easily check their schedules for specific dates and a function that calculates common free time across multiple users' schedules. This allows students to more efficiently plan group activities and study time.</p>
+    <div id="container">
+        <div id="nav">
+            <a class="navlink" href="about.html">About Page</a>
+            <a class="navlink" href="project.html">Project Page</a>
+            <a class="navlink" href="index.html">Home Page</a>
+            <a class="navlink" href="showcase.html">Showcase Page</a>
+        </div>
 
-        <p>-----------------------------------------------------------------------------------</p>
+        <div id="content">
+            <h2>SyncSpace Development Plan</h2>
 
-        <p>3. Data Description</p>
-        <p>1 - USERS</p>
-        <p>Why it is needed: This table is needed to store each person who can log in and use the calendar system.</p>
-        <p>What it stores: It stores account and identity information for each user.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>user_id — INT — Primary Key</li>
-            <li>username — VARCHAR(50)</li>
-            <li>email — VARCHAR(100)</li>
-            <li>password_hash — VARCHAR(255)</li>
-            <li>created_at — DATETIME</li>
-        </ul>
+            <p><strong>1. Names</strong></p>
+            <p>- KARZ inc.</p>
+            <p>- Taewoo Kim / Marcus Rotaru / Mazen Anklis / Erfan Zamani</p>
+            <p>- Client Name: Henry Moore</p>
+            <p>- Organizational Affiliation: McMaster Student</p>
 
-        <p>2 - GROUPS</p>
-        <p>Why it is needed: This table is needed to represent shared groups that have their own calendars.</p>
-        <p>What it stores: It stores basic information about each group, such as its name and who created it.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>group_id — INT — Primary Key</li>
-            <li>group_name — VARCHAR(100)</li>
-            <li>description — TEXT</li>
-            <li>created_by — INT</li>
-            <li>created_at — DATETIME</li>
-        </ul>
+            <hr>
 
-        <p>3 - GROUP_MEMBERS</p>
-        <p>Why it is needed: This table is needed because one user can belong to many groups, and one group can contain many users.</p>
-        <p>What it stores: It stores the membership relationship between users and groups, along with each member's role.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>membership_id - INT - Primary Key</li>
-            <li>group_id - INT</li>
-            <li>user_id - INT</li>
-            <li>role - VARCHAR(20)</li>
-            <li>joined at - DATETIME</li>
-        </ul>
+            <p><strong>2. Purpose</strong></p>
+            <p>This app is designed to help students manage their own schedules and those of their friends. It supports
+                personal schedules, schedule sharing, and collaboration.</p>
+            <p>The client wanted an intuitive scheduling tool where students could easily view their own and each
+                other’s schedules on both mobile and desktop, with a simple interface and clear visual structure.</p>
+            <p>To meet these needs, SyncSpace includes login-based personal accounts, group calendar sharing, a day view
+                for checking specific dates, and a feature that calculates common free time across multiple users’
+                schedules.</p>
 
-        <p>4 - EVENTS</p>
-        <p>Why it is needed: This table is needed to store all calendar events, whether they belong to a user’s personal calendar or a group calendar.</p>
-        <p>What it stores: It stores event details such as title, description, start and end times, creator, and ownership.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>event_id - INT - Primary Key</li>
-            <li>title - VARCHAR(100)</li>
-            <li>description - TEXT</li>
-            <li>start_time - DATETIME</li>
-            <li>end_time - DATETIME</li>
-            <li>created_by - INT</li>
-            <li>owner_user_id - INT - nullable</li>
-            <li>owner_group_id - INT - nullable</li>
-            <li>location - VARCHAR(150)</li>
-            <li>is_all_day - BOOLEAN</li>
-            <li>created_at - DATETIME</li>
-            <li>updated_at - DATETIME</li>
-            <li>anonymous - BOOLEAN</li>
-            <li>importance - INT</li>
-        </ul>
+            <hr>
 
-        <p>5 - RECURRING_EVENT</p>
-        <p>Why it is needed: This table is needed to store the repetition pattern for events that occur regularly, such as daily, weekly, or monthly events.</p>
-        <p>What it stores: It stores recurrence rules linked to an event, including how often it repeats and when the repetition ends.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>recurring_id - INT - Primary Key</li>
-            <li>event_id - INT</li>
-            <li>repeat_type - VARCHAR(20)</li>
-            <li>interval_value - INT</li>
-            <li>days_of_week - VARCHAR(20) - nullable</li>
-            <li>end_date - DATETIME - nullable</li>
-            <li>occurrence_count - INT - nullable</li>
-        </ul>
+            <p><strong>3. Data Description</strong></p>
 
-        <p>6 - EVENT_EXCEPTIONS</p>
-        <p>Why it is needed: This table is needed to handle special cases where one occurrence of a recurring event is changed, skipped, or cancelled without changing the entire series.</p>
-        <p>What it stores: It stores modifications for individual occurrences of recurring events, such as a different time, a cancellation, or a changed title.</p>
-        <p>     - Fields</p>
-        <ul>
-            <li>exception_id - INT - Primary Key</li>
-            <li>recurring_id - INT</li>
-            <li>original_date - DATETIME</li>
-            <li>is_cancelled - BOOLEAN</li>
-            <li>new_start_time - DATETIME - nullable</li>
-            <li>new_end_time - DATETIME - nullable</li>
-            <li>new_title - VARCHAR(100) - nullable</li>
-            <li>new_description - TEXT - nullable</li>
-        </ul>
+            <p><strong>USERS</strong></p>
+            <ul>
+                <li>user_id — INT — Primary Key</li>
+                <li>username — VARCHAR(50)</li>
+                <li>email — VARCHAR(100)</li>
+                <li>password_hash — VARCHAR(255)</li>
+                <li>created_at — DATETIME</li>
+            </ul>
 
-        <p>-----------------------------------------------------------------------------------</p>
+            <p><strong>GROUPS</strong></p>
+            <ul>
+                <li>group_id — INT — Primary Key</li>
+                <li>group_name — VARCHAR(100)</li>
+                <li>description — TEXT</li>
+                <li>created_by — INT</li>
+                <li>created_at — DATETIME</li>
+            </ul>
 
-        <p>4. Functions Performed by the App</p>
+            <p><strong>GROUP_MEMBERS</strong></p>
+            <ul>
+                <li>membership_id — INT — Primary Key</li>
+                <li>group_id — INT</li>
+                <li>user_id — INT</li>
+                <li>role — VARCHAR(20)</li>
+                <li>joined_at — DATETIME</li>
+            </ul>
 
-        <p>1 - User Registration and Login</p>
-        <ul>
-            <li>Users can create an account and log into the system to access their personal and shared schedules.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into USERS when a new account is created</li>
-                    <li>SELECT from USERS to validate login credentials</li>
-                </ul>
-            </li>
-        </ul>
+            <p><strong>EVENTS</strong></p>
+            <ul>
+                <li>event_id — INT — Primary Key</li>
+                <li>title — VARCHAR(100)</li>
+                <li>description — TEXT</li>
+                <li>start_time — DATETIME</li>
+                <li>end_time — DATETIME</li>
+                <li>created_by — INT</li>
+                <li>owner_user_id — INT — nullable</li>
+                <li>owner_group_id — INT — nullable</li>
+                <li>location — VARCHAR(150)</li>
+                <li>is_all_day — BOOLEAN</li>
+                <li>created_at — DATETIME</li>
+                <li>updated_at — DATETIME</li>
+                <li>anonymous — BOOLEAN</li>
+                <li>importance — INT</li>
+            </ul>
 
-        <p>2 - Create and Manage Personal Events</p>
-        <ul>
-            <li>Users can create events in their personal calendar, including title, time, location, and description.</li>
-            <li>Users can optionally mark events as anonymous.</li>
-            <li>Anonymous events hide all details except time and priority when viewed by others.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into EVENTS when a new event is created</li>
-                    <li>UPDATE on EVENTS when an event is edited</li>
-                    <li>DELETE from EVENTS when an event is removed</li>
-                    <li>INSERT &amp; UPDATE EVENTS with anonymous_flag (if event is anonymous)</li>
-                </ul>
-            </li>
-        </ul>
+            <p><strong>RECURRING_EVENT</strong></p>
+            <ul>
+                <li>recurring_id — INT — Primary Key</li>
+                <li>event_id — INT</li>
+                <li>repeat_type — VARCHAR(20)</li>
+                <li>interval_value — INT</li>
+                <li>days_of_week — VARCHAR(20) — nullable</li>
+                <li>end_date — DATETIME — nullable</li>
+                <li>occurrence_count — INT — nullable</li>
+            </ul>
 
-        <p>3 - View Calendar (Daily / Weekly / Monthly)</p>
-        <ul>
-            <li>Users can view their schedule in different formats (day, week, or month), with events clearly displayed.</li>
-            <li>Responsive design supports both desktop and mobile devices</li>
-            <li>Database Effect
-                <ul>
-                    <li>SELECT from EVENTS to retrieve relevant event data</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>JavaScript dynamically renders calendar views</li>
-                    <li>Events are visually organized with clear hierarchy and minimal clutter</li>
-                </ul>
-            </li>
-        </ul>
+            <p><strong>EVENT_EXCEPTIONS</strong></p>
+            <ul>
+                <li>exception_id — INT — Primary Key</li>
+                <li>recurring_id — INT</li>
+                <li>original_date — DATETIME</li>
+                <li>is_cancelled — BOOLEAN</li>
+                <li>new_start_time — DATETIME — nullable</li>
+                <li>new_end_time — DATETIME — nullable</li>
+                <li>new_title — VARCHAR(100) — nullable</li>
+                <li>new_description — TEXT — nullable</li>
+            </ul>
 
-        <p>4 - Create and Manage Groups</p>
-        <ul>
-            <li>Users can create groups to share schedules with others and collaborate.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into GROUPS when a group is created</li>
-                    <li>INSERT into GROUP_MEMBERS when users are added to a group</li>
-                    <li>DELETE from GROUP_MEMBERS when users leave or are removed</li>
-                </ul>
-            </li>
-        </ul>
+            <hr>
 
-        <p>5 - Share Events with Groups</p>
-        <ul>
-            <li>Users can assign events to a group so all members can view them.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT / UPDATE in EVENTS using owner_group_id</li>
-                    <li>SELECT from GROUP_MEMBERS to determine access permissions</li>
-                </ul>
-            </li>
-        </ul>
+            <p><strong>6. Wireframes</strong></p>
+            <iframe src="Wireframes 1xd3.pdf" width="100%" height="600px"></iframe>
+            <p><a href="Wireframes 1xd3.pdf" target="_blank">Click to View Wireframe (if embed fails)</a></p>
+        </div>
 
-        <p>6 - View Other Users' Schedules</p>
-        <ul>
-            <li>Users can view the schedules of group members to coordinate activities.</li>
-            <li>Database Effect
-                <ul>
-                    <li>SELECT from EVENTS based on group membership</li>
-                    <li>SELECT from GROUP_MEMBERS to verify access</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>Events from different users are visually distinguished (e.g., color or labels)</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>7 - Daily Comparison View</p>
-        <ul>
-            <li>Users can select a specific day to compare schedules and see availability across multiple users.</li>
-            <li>Shows distribution of event priorities across users for the selected day.</li>
-            <li>Database Effect
-                <ul>
-                    <li>SELECT from EVENTS filtered by date and users</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>JavaScript filters and displays only relevant time blocks for the selected day</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>8 - Free Time Finder</p>
-        <ul>
-            <li>The app calculates shared free time between users to help schedule meetings or study sessions.</li>
-            <li>Supports priority-based scheduling (events have importance levels).</li>
-            <li>Displays which users are busy and affected in each time slot.</li>
-            <li>Provides two optimization modes:
-                <ul>
-                    <li>Minimize number of people inconvenienced</li>
-                    <li>Minimize total inconvenience (based on event priority)</li>
-                </ul>
-            </li>
-            <li>Database Effect
-                <ul>
-                    <li>SELECT from EVENTS for all selected users (including importance field)</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>Algorithm compares time intervals to find overlapping free slots</li>
-                    <li>Evaluates trade-offs between time slots using priority weights</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>9 - Recurring Events</p>
-        <ul>
-            <li>Users can create events that repeat daily, weekly, or monthly.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into RECURRING_EVENT</li>
-                    <li>SELECT to generate repeated occurrences</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>10 - Modify or Skip Recurring Events</p>
-        <ul>
-            <li>Users can modify or cancel specific instances of recurring events</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into EVENT_EXCEPTIONS</li>
-                    <li>UPDATE based on exception rules</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>11 - Offline Viewing (Cached Data)</p>
-        <ul>
-            <li>Users can view previously loaded schedules even without an internet connection.</li>
-            <li>Database Effect
-                <ul>
-                    <li>No direct database interaction while offline</li>
-                    <li>When online: SELECT data for caching</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>Data is stored locally on the device and rendered without server access</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>12 - Event Importance (Optional Optimization Feature)</p>
-        <ul>
-            <li>Users can assign importance levels to events to assist in scheduling decisions.</li>
-            <li>Database Effect
-                <ul>
-                    <li>UPDATE / INSERT within EVENTS (if importance field is included)</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>Used in scheduling logic to prioritize important events when calculating free time</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>13 - Import Schedule from Mosaic</p>
-        <ul>
-            <li>Users can import class schedules from McMaster Mosaic to avoid manual input.</li>
-            <li>Database Effect
-                <ul>
-                    <li>INSERT into EVENTS from parsed timetable data</li>
-                </ul>
-            </li>
-            <li>Client-side Implementation
-                <ul>
-                    <li>Parser extracts course time blocks and automatically creates events</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>-----------------------------------------------------------------------------------</p>
-
-        <p>5. WORK SPLIT</p>
-
-        <ul>
-            <li>(Mazen) Calendar view = Lots of display work, will have to interpret backend data</li>
-            <li>(Taewoo) Login and Account settings = User auth work</li>
-            <li>(Erfan) Event Adding = Will need to encode data that gets displayed on the calendar</li>
-            <li>(Marcus) Event Sharing = Need to deal with mix of account auth and data encoding</li>
-        </ul>
-
-        <p>-----------------------------------------------------------------------------------</p>
-
-        <p>6. Wireframes</p>
-        <ul>
-            <iframe src="Wireframes 1xd3.pdf" width=100% height="600px"></iframe>
-            <a href="Wireframes 1xd3.pdf" target="_blank">Click to View Wireframe (if imbed fails)</a>
-        </ul>
-
-        <p>-----------------------------------------------------------------------------------</p>
-
-        <p>7. Increments</p>
-
-        <p>LAB 12.2:</p>
-        <ul>
-            <li>Calendar View:
-                <ul>
-                    <li>EITHER tablet or phone view done, can take in data and display on at least 1 of monthly, weekly, or daily view</li>
-                </ul>
-            </li>
-            <li>Login and Account Settings:
-                <ul>
-                    <li>Display for sign up/sign in done, username/password is stored and authenticated, no encryption</li>
-                </ul>
-            </li>
-            <li>Event Adding:
-                <ul>
-                    <li>Display for event adding, transfer event data into data base, ideally formatted in a way that aligns with calendar view</li>
-                </ul>
-            </li>
-            <li>Event Sharing:
-                <ul>
-                    <li>Create an “event group” share page. Create all necessary data tables, find out how events groups will be shared</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>MID of EXAMS</p>
-        <ul>
-            <li>Cal View:
-                <ul>
-                    <li>Finish all views, can display event data, can find gaps in schedule</li>
-                </ul>
-            </li>
-            <li>Login and Account Settings:
-                <ul>
-                    <li>Have a full fledged login system with encryption, and usernames/passwords stored within the database.</li>
-                </ul>
-            </li>
-            <li>Event Adding:
-                <ul>
-                    <li>Data is able to be linked to an account, and events are encoded in an effective way</li>
-                </ul>
-            </li>
-            <li>Event Sharing:
-                <ul>
-                    <li>Fully figure out how events are stored and accessed by shared calendars</li>
-                </ul>
-            </li>
-        </ul>
-
-        <p>-----------------------------------------------------------------------------------</p>
-
-        <p>8. Client Feedback</p>
-        <ul>
-            <li>“Why don't we add the function to make an event anonymous? It can appear as a blocked out area with priority”
-                <ul>
-                    <li>An event can have an anonymous tag, where when it is pulled from the database, all information is scrubbed aside from the time it takes up and the priority.</li>
-                </ul>
-            </li>
-            <li>“Please make sure that the view does work on both the computer mobile”
-                <ul>
-                    <li>We never explicitly wrote that the app would have the function to work on mobile and computer, this was added as a function.</li>
-                </ul>
-            </li>
-            <li>“Could you find a way to import the class times from mosaic? My number one complaint with my calendar app was how long it took to input my classes”
-                <ul>
-                    <li>We added a function that is able to look at the McMaster mosaic timetable and add them as events.</li>
-                </ul>
-            </li>
-            <li>“It would be nice if it could show which people are free on which days, like 2 people are free on Tuesday, 1 person has a low priority task, and 1 person has a high priority task. When groups get big, a way to see the composition of priorities for a given day. There's probably situations where there's a perfect time, but if not we want to pick the next best thing”
-                <ul>
-                    <li>Make sure that after finding time slots, we clearly display which events are taken up and who is inconvenienced. Also create 2 modes, minimum amount of people inconvenienced and minimum amount of total inconvenience. Added this into the free time finder description.</li>
-                </ul>
-            </li>
-        </ul>
-
+        <div id="footer">
+            &copy; 2026 KARZ inc. / McMaster University
+        </div>
     </div>
 </body>
+
 </html>

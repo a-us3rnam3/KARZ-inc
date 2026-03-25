@@ -1,57 +1,217 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="css\simpleRoundStyle.css"></head>
+    <meta name="viewport" content="width=device-width">
+    <title>Project Page - KARZ inc.</title>
+
+    <style>
+        body {
+            font-family: unset;
+            background-color: ivory;
+            margin: 0;
+            padding: 0;
+        }
+
+        #header {
+            display: flex;
+            align-items: center;
+            background-color: #EDEDE9;
+            margin-bottom: -20px;
+            text-align: center;
+            padding: 10px 20px;
+        }
+
+        #container {
+            color: #D6CCC2;
+        }
+
+        h1 {
+            text-align: center;
+            padding-top: 20px;
+            color: #81b29a;
+            font-family: unset;
+            margin: 0 auto;
+        }
+
+        h2 {
+            color: black;
+            font-size: 20px;
+        }
+
+        #logo {
+            width: 30%;
+            max-width: 180px;
+            height: auto;
+        }
+
+        #nav {
+            background-color: #588b8b;
+            padding: 20px;
+            display: flex;
+            text-align: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        a.navlink {
+            padding: 17px;
+            border-radius: 17px;
+            background-color: #81b29a;
+            color: #EDEDE9;
+            width: 18%;
+            min-width: 140px;
+            margin: 7px;
+            text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
+        }
+
+        #content {
+            padding: 30px;
+            color: black;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: #F5EBE0;
+            border-radius: 20px;
+            box-sizing: border-box;
+            line-height: 1.6;
+        }
+
+        #footer {
+            font-family: unset;
+            background-color: #F5EBE0;
+            color: #81b29a;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        ul {
+            padding-left: 25px;
+        }
+
+        p,
+        li {
+            line-height: 1.6;
+        }
+
+        @media (min-width:700px) {
+            #logo {
+                width: 20%;
+            }
+
+            h1 {
+                font-size: 177%;
+            }
+        }
+
+        @media (max-width:700px) {
+            #header {
+                flex-direction: column;
+            }
+
+            #nav {
+                justify-content: center;
+            }
+
+            a.navlink {
+                width: 90%;
+            }
+
+            #content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
-<body class="flex">
-    <h1>
-        KARZ Projects
-    </h1>
-    <div class="line"></div>
-    <div class="textbox">
-        <h2> SyncSpace</h2>
-        <p>Name: Henry Moore</p>
-        <p>Org Affil: McMaster Student</p>
 
-        <p>Users will be McMaster Students, likely to use the app on both computer and mobile. I believe they will often view data on mobile, but input data on a desktop. Easy importing of class schedules.
-        </p>
-        <!-- <p>
-            A loaded schedule, cashed/downloaded on the device, uses the local date and time to approximate where they are. TRULY offline, non-cashed info would likely just be an empty calendar with the date and time taken from the device.
-        </p> -->
+<body>
+    <div id="header">
+        <img id="logo" src="Logo/KARZ_inc_Background_deleted.png" alt="KARZ inc. logo">
+        <h1>KARZ inc.</h1>
+    </div>
 
-        <p>
-            Static information will be a miniature tutorial.
-        </p>
+    <div id="container">
+        <div id="nav">
+            <a class="navlink" href="about.html">About Page</a>
+            <a class="navlink" href="index.html">Home Page</a>
+            <a class="navlink" href="developmentplan.html">Development Plan Page</a>
+            <a class="navlink" href="showcase.html">Showcase Page</a>
+        </div>
 
-        <p>
-            Will have a login page for each user, after loggining in, you will be able to see a general page of every calendar collection you have (friend groups).
-        </p>
+        <div id="content">
+            <h2>SyncSpace</h2>
 
-        <p>
-            This is a calendar app; the interface should be simple and to the point without any extra and unnecessary buttons and random functionality. The app should have a clear and distinct visual hierarchy where upcoming events are labelled clearly and stand out in size/shape/colour. The colour palette should be muted, without loud colours and bold fonts. The pages must maintain a modern look, a clean and sharp appearance without sacrificing functionality. There should be purposeful animations, like when finishing a task, there should be a slight animation to reference the completion of a task that adds a nice, unique touch without being too over the top. The calendar should also be simple and not appear too busy, even if the user does have many tasks throughout the day. The app should also have a visual distinction between your own events and the events of your peers.
-        </p>
+            <p><strong>Name:</strong> Henry Moore</p>
+            <p><strong>Org Affil:</strong> McMaster Student</p>
 
-        <p>
-            The client would want their own schedule to be presented to the user, as well as other users' schedules to be presented to them. They would want to see the current date and time, as well as future day plans. 
-        </p>
+            <p>
+                Users will be McMaster students, likely to use the app on both computer and mobile.
+                I believe they will often view data on mobile, but input data on a desktop.
+                Easy importing of class schedules will be important.
+            </p>
 
-        <ul>
-            <li>
-                A nice tool would be to be able to view an individual day, simply to see where everyone is and will be at a specific time. 
-            </li>
-            <li>
-                A calculator to find spots when everyone is free
-            </li>
-            <li>
-                A system where you can list the importance of the event, and the free time optimizer can calculate a timeslot with minimal overlap of less important events. (could filter the importance of events to determine what can be removed)
-            </li>
-            <li>
-                when you're schedule is in the same location as another user, you will get a lil ping to notify that you're in the same area (this is assumeing you are following your schedule to a T)
-            </li>
-        </ul>
+            <p>
+                Static information will be a miniature tutorial.
+            </p>
+
+            <p>
+                The app will have a login page for each user. After logging in, users will be able to
+                see a general page showing every calendar collection they have, such as friend groups.
+            </p>
+
+            <p>
+                This is a calendar app, so the interface should be simple and to the point without
+                extra unnecessary buttons or random functionality. The app should have a clear and
+                distinct visual hierarchy where upcoming events are labelled clearly and stand out in
+                size, shape, or colour. The colour palette should be muted, without loud colours or
+                bold fonts. The pages must maintain a modern look and a clean, sharp appearance
+                without sacrificing functionality.
+            </p>
+
+            <p>
+                There should be purposeful animations. For example, when finishing a task, there could
+                be a slight animation to show completion in a way that adds a nice unique touch
+                without being too over the top. The calendar should also stay simple and not look too
+                busy, even if the user has many tasks throughout the day. The app should also have a
+                visual distinction between your own events and the events of your peers.
+            </p>
+
+            <p>
+                The client would want their own schedule to be presented to the user, as well as other
+                users' schedules. They would want to see the current date and time, as well as future
+                day plans.
+            </p>
+
+            <ul>
+                <li>
+                    A useful tool would be the ability to view an individual day, simply to see where
+                    everyone is and will be at a specific time.
+                </li>
+                <li>
+                    A calculator to find spots when everyone is free.
+                </li>
+                <li>
+                    A system where you can list the importance of an event, and the free time optimizer
+                    can calculate a timeslot with minimal overlap of less important events.
+                </li>
+                <li>
+                    When your schedule is in the same location as another user, you could get a small
+                    notification to show that you're in the same area, assuming both users are
+                    following their schedules exactly.
+                </li>
+            </ul>
+        </div>
+
+        <div id="footer">
+            &copy; 2026 KARZ inc. / McMaster University
+        </div>
     </div>
 </body>
+
 </html>
