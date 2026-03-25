@@ -13,13 +13,17 @@ web page and include your name as author.
         body {
             font-family: unset;
             background-color: ivory;
+            margin: 0;
+            padding: 0;
         }
 
         #header {
             display: flex;
+            align-items: center;
             background-color: #EDEDE9;
             margin-bottom: -20px;
             text-align: center;
+            padding: 10px 20px;
         }
 
         #container {
@@ -28,11 +32,10 @@ web page and include your name as author.
 
         h1 {
             text-align: center;
-            padding-top: 50px;
+            padding-top: 20px;
             color: #81b29a;
             font-family: unset;
-            text-align: center;
-
+            margin: 0 auto;
         }
 
         h2 {
@@ -42,6 +45,8 @@ web page and include your name as author.
 
         #logo {
             width: 30%;
+            max-width: 180px;
+            height: auto;
         }
 
         #website {
@@ -51,6 +56,11 @@ web page and include your name as author.
         #nav {
             background-color: #588b8b;
             padding: 20px;
+            display: flex;
+            text-align: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         a.navlink {
@@ -58,39 +68,69 @@ web page and include your name as author.
             border-radius: 17px;
             background-color: #81b29a;
             color: #EDEDE9;
-            width: 27%;
+            width: 18%;
+            min-width: 140px;
             margin: 7px;
             text-align: center;
+            text-decoration: none;
+            box-sizing: border-box;
         }
 
         #content {
-            padding: 17px;
-            border-radius: 17px;
-            width: 27%;
-            margin: 7px;
-            text-align: center;
-            justify-content: space-evenly;
+            padding: 30px;
+            color: black;
+            max-width: 1100px;
+            margin: 30px auto;
+            background-color: #F5EBE0;
+            border-radius: 20px;
+            box-sizing: border-box;
+            line-height: 1.6;
         }
 
         #footer {
             font-family: unset;
             background-color: #F5EBE0;
             color: #81b29a;
+            text-align: center;
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        #nav {
-            display: flex;
-            text-align: center;
-            justify-content: space-between;
+        ul {
+            padding-left: 25px;
+        }
+
+        iframe {
+            border: none;
+            border-radius: 10px;
         }
 
         @media (min-width:700px) {
             #logo {
-                width: 20%
+                width: 20%;
             }
 
             h1 {
                 font-size: 177%;
+            }
+        }
+
+        @media (max-width:700px) {
+            #header {
+                flex-direction: column;
+            }
+
+            #nav {
+                justify-content: center;
+            }
+
+            a.navlink {
+                width: 90%;
+            }
+
+            #content {
+                width: 95%;
+                padding: 20px;
             }
         }
     </style>
@@ -106,7 +146,8 @@ web page and include your name as author.
         <div id="nav">
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/about.html">About Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/project.html">Project Page</a>
-            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/developmentplan.html">Development Plan Page</a>
+            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/developmentplan.html">Development Plan
+                Page</a>
             <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/showcase.html">Showcase Page</a>
         </div>
         <a href="https://www.mcmaster.ca/" target="_blank">
