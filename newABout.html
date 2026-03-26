@@ -1,133 +1,11 @@
 <!doctype html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width">
-    <title>Project Page - KARZ inc.</title>
-
-    <style>
-        body {
-            font-family: unset;
-            background-color: ivory;
-            margin: 0;
-            padding: 0;
-        }
-
-        #header {
-            display: flex;
-            align-items: center;
-            background-color: #EDEDE9;
-            margin-bottom: -20px;
-            text-align: center;
-            padding: 10px 20px;
-        }
-
-        #container {
-            color: #D6CCC2;
-        }
-
-        h1 {
-            text-align: center;
-            padding-top: 20px;
-            color: #81b29a;
-            font-family: unset;
-            margin: 0 auto;
-        }
-
-        h2 {
-            color: black;
-            font-size: 20px;
-        }
-
-        #logo {
-            width: 30%;
-            max-width: 180px;
-            height: auto;
-        }
-
-        #nav {
-            background-color: #588b8b;
-            padding: 20px;
-            display: flex;
-            text-align: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        a.navlink {
-            padding: 17px;
-            border-radius: 17px;
-            background-color: #81b29a;
-            color: #EDEDE9;
-            width: 18%;
-            min-width: 140px;
-            margin: 7px;
-            text-align: center;
-            text-decoration: none;
-            box-sizing: border-box;
-        }
-
-        #content {
-            padding: 30px;
-            color: black;
-            max-width: 1100px;
-            margin: 30px auto;
-            background-color: #F5EBE0;
-            border-radius: 20px;
-            box-sizing: border-box;
-            line-height: 1.6;
-        }
-
-        #footer {
-            font-family: unset;
-            background-color: #F5EBE0;
-            color: #81b29a;
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        ul {
-            padding-left: 25px;
-        }
-
-        p,
-        li {
-            line-height: 1.6;
-        }
-
-        @media (min-width:700px) {
-            #logo {
-                width: 20%;
-            }
-
-            h1 {
-                font-size: 177%;
-            }
-        }
-
-        @media (max-width:700px) {
-            #header {
-                flex-direction: column;
-            }
-
-            #nav {
-                justify-content: center;
-            }
-
-            a.navlink {
-                width: 90%;
-            }
-
-            #content {
-                width: 95%;
-                padding: 20px;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - KARZ inc.</title>
+    <link rel="stylesheet" href="css/main.css">
 </head>
 
 <body>
@@ -136,69 +14,60 @@
         <h1>KARZ inc.</h1>
     </div>
 
-    <div id="container">
-        <div id="nav">
-            <a class="navlink" href="about.html">About Page</a>
-            <a class="navlink" href="index.html">Home Page</a>
-            <a class="navlink" href="developmentplan.html">Development Plan Page</a>
-            <a class="navlink" href="showcase.html">Showcase Page</a>
+    <div id="nav">
+        <a class="navlink" href="index.html">Home</a>
+        <a class="navlink active" href="about.html">About</a>
+        <a class="navlink" href="project.html">Project</a>
+        <a class="navlink" href="developmentplan.html">Development Plan</a>
+        <a class="navlink" href="showcase.html">Showcase</a>
+    </div>
+
+    <div id="content">
+        <h2>Meet the Team</h2>
+
+        <div class="member-card">
+            <img src="images/Taewoo_image.png" alt="Taewoo Kim">
+            <div class="member-info">
+                <a class="role" href="https://cs1xd3.cas.mcmaster.ca/~kimt89">Functional Developer &mdash; Taewoo Kim</a>
+                <p>Taewoo has been properly programming for 1 year.
+                    He usually plays games, watches movies, and hangs out with his friends in spare time.
+                    He had never done web programming before, but he is enjoying the experience now.</p>
+            </div>
         </div>
 
-        <div style="color: black;">
-            <div id="Personal">
-                <img src="images/Taewoo_image.png" , width="15%">
-                <div id="descr">
-                    <a href="https://cs1xd3.cas.mcmaster.ca/~kimt89">
-                        <h1>Functional Developer</h1>
-                    </a>
-                    <p>Taewoo has been properly programming for 1 year.
-                        He usually play games, watch movies, and hang out with his friends in spare time.
-                        He never done the web programming, but he is enjoying the experience now.
-                    </p>
-                </div>
+        <div class="member-card">
+            <img src="images/Marcus_image.png" alt="Marcus Rotaru">
+            <div class="member-info">
+                <a class="role" href="https://cs1xd3.cas.mcmaster.ca/~rotarum">Site Manager &mdash; Marcus Rotaru</a>
+                <p>Marcus has been properly programming for 5 years.
+                    In his spare time, he likes playing single player games, board games, and Dungeons and Dragons.
+                    He hasn't done much web programming, and has been enjoying the experience so far.</p>
             </div>
-            <div id="Personal">
-                <img src="images/Marcus_image.png" , width="15%">
-                <div id="descr">
-                    <a href="https://cs1xd3.cas.mcmaster.ca/~rotarum">
-                        <h1>Site Manager</h1>
-                    </a>
-                    <p>Marcus has been properly programming for 5 years.
-                        In his spare time, he likes playing single player games, board games, and Dungeons and Dragons.
-                        He hasn't done much web programming, and has been enjoying the experience so far.</p>
-                </div>
-
-            </div>
-            <div id="Personal">
-                <img src="images/Mazen_image.png" , width="15%">
-                <div id="descr">
-                    <a href="https://cs1xd3.cas.mcmaster.ca/~anklmi1">
-                        <h1>Creative Designer</h1>
-                    </a>
-                    <p>Mazen has been programming for 3 years.
-                        He enjoys a variety of sports and physical activity including basketball, tennis, swimming, ping
-                        pong, soccer and lifting weights.
-                        He loves to hang out with his friends and he is a very outgoing and fun person to be around.
-                    </p>
-                </div>
-            </div>
-            <div id="Personal">
-                <img src="images/Erfan_image.png" , width="15%">
-                <div id="descr">
-                    <a href="https://cs1xd3.cas.mcmaster.ca/~zamane1">
-                        <h1>lead Developer</h1>
-                    </a>
-                    <p>Erfan has been programming for 5 years now.
-                        He enjoys creating meaningful projects and lifting weights on the side.
-                        He has some experience in web programming and hopes to expand his knowledge further.</p>
-                </div>
-            </div>
-
         </div>
 
-        <div id="footer">
-            &copy; 2026 KARZ inc. / McMaster University
+        <div class="member-card">
+            <img src="images/Mazen_image.png" alt="Mazen Anklis">
+            <div class="member-info">
+                <a class="role" href="https://cs1xd3.cas.mcmaster.ca/~anklmi1">Creative Designer &mdash; Mazen Anklis</a>
+                <p>Mazen has been programming for 3 years.
+                    He enjoys a variety of sports including basketball, tennis, swimming, ping pong, soccer, and
+                    lifting weights. He loves to hang out with his friends and is a very outgoing person.</p>
+            </div>
         </div>
+
+        <div class="member-card">
+            <img src="images/Erfan_image.png" alt="Erfan Zamani">
+            <div class="member-info">
+                <a class="role" href="https://cs1xd3.cas.mcmaster.ca/~zamane1">Lead Developer &mdash; Erfan Zamani</a>
+                <p>Erfan has been programming for 5 years.
+                    He enjoys creating meaningful projects and lifting weights on the side.
+                    He has some experience in web programming and hopes to expand his knowledge further.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer">
+        &copy; 2026 KARZ inc. / McMaster University
     </div>
 </body>
 

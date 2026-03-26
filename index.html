@@ -1,161 +1,40 @@
 <!doctype html>
-<!--
-TODO: This is a comment. Change this header comment to describe the 
-web page and include your name as author.
--->
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KARZ inc.</title>
-    <style>
-        body {
-            font-family: unset;
-            background-color: ivory;
-            margin: 0;
-            padding: 0;
-        }
-
-        #header {
-            display: flex;
-            align-items: center;
-            background-color: #EDEDE9;
-            margin-bottom: -20px;
-            text-align: center;
-            padding: 10px 20px;
-        }
-
-        #container {
-            color: #D6CCC2;
-        }
-
-        h1 {
-            text-align: center;
-            padding-top: 20px;
-            color: #81b29a;
-            font-family: unset;
-            margin: 0 auto;
-        }
-
-        h2 {
-            color: black;
-            font-size: 20px;
-        }
-
-        #logo {
-            width: 30%;
-            max-width: 180px;
-            height: auto;
-        }
-
-        #website {
-            width: 70px;
-        }
-
-        #nav {
-            background-color: #588b8b;
-            padding: 20px;
-            display: flex;
-            text-align: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        a.navlink {
-            padding: 17px;
-            border-radius: 17px;
-            background-color: #81b29a;
-            color: #EDEDE9;
-            width: 18%;
-            min-width: 140px;
-            margin: 7px;
-            text-align: center;
-            text-decoration: none;
-            box-sizing: border-box;
-        }
-
-        #content {
-            padding: 30px;
-            color: black;
-            max-width: 1100px;
-            margin: 30px auto;
-            background-color: #F5EBE0;
-            border-radius: 20px;
-            box-sizing: border-box;
-            line-height: 1.6;
-        }
-
-        #footer {
-            font-family: unset;
-            background-color: #F5EBE0;
-            color: #81b29a;
-            text-align: center;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        ul {
-            padding-left: 25px;
-        }
-
-        iframe {
-            border: none;
-            border-radius: 10px;
-        }
-
-        @media (min-width:700px) {
-            #logo {
-                width: 20%;
-            }
-
-            h1 {
-                font-size: 177%;
-            }
-        }
-
-        @media (max-width:700px) {
-            #header {
-                flex-direction: column;
-            }
-
-            #nav {
-                justify-content: center;
-            }
-
-            a.navlink {
-                width: 90%;
-            }
-
-            #content {
-                width: 95%;
-                padding: 20px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="css/main.css">
 </head>
-
 
 <body>
     <div id="header">
-        <img id="logo" src="Logo/KARZ_inc_Background_deleted.png">
+        <img id="logo" src="Logo/KARZ_inc_Background_deleted.png" alt="KARZ inc. logo">
         <h1>KARZ inc.</h1>
     </div>
-    <div id="container">
-        <div id="nav">
-            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/about.html">About Page</a>
-            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/project.html">Project Page</a>
-            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/developmentplan.html">Development Plan
-                Page</a>
-            <a class="navlink" href="https://cs1xd3.cas.mcmaster.ca/~rotarum/team/showcase.html">Showcase Page</a>
-        </div>
-        <a href="https://www.mcmaster.ca/" target="_blank">
 
-        </a>
-        <div id="footer">
-            &copy; 2026 KARZ inc. / McMaster University
-        </div>
+    <div id="nav">
+        <a class="navlink active" href="index.html">Home</a>
+        <a class="navlink" href="newABout.html">About</a>
+        <a class="navlink" href="project.html">Project</a>
+        <a class="navlink" href="developmentplan.html">Development Plan</a>
+        <a class="navlink" href="showcase.html">Showcase</a>
+    </div>
+
+    <div id="content">
+        <h2>Welcome to KARZ inc.</h2>
+        <p>
+            KARZ inc. is a McMaster University student team working on <strong>SyncSpace</strong> &mdash; a collaborative
+            scheduling app that lets students view, share, and coordinate calendars with friends and classmates.
+        </p>
+        <p>
+            Use the navigation above to explore our team, project details, development plan, and showcase.
+        </p>
+    </div>
+
+    <div id="footer">
+        &copy; 2026 KARZ inc. / McMaster University
     </div>
 </body>
 

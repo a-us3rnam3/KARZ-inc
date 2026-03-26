@@ -1,0 +1,280 @@
+/* ===== Reset / Base ===== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: ivory;
+    margin: 0;
+    padding: 0 0 50px;
+    color: #333;
+}
+
+/* ===== Header ===== */
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background-color: #EDEDE9;
+    padding: 18px 28px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    position: relative;
+    z-index: 1;
+}
+
+#logo {
+    width: 30%;
+    max-width: 150px;
+    height: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #81b29a;
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+/* ===== Navigation ===== */
+#nav {
+    background-color: #588b8b;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    position: relative;
+    z-index: 0;
+}
+
+a.navlink {
+    padding: 10px 22px;
+    border-radius: 10px;
+    background-color: #81b29a;
+    color: #EDEDE9;
+    text-align: center;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    letter-spacing: 0.3px;
+    transition: background-color 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+}
+
+a.navlink:hover {
+    background-color: #6a9d84;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+a.navlink.active {
+    background-color: #4e8a6e;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== Content Card ===== */
+#content {
+    padding: 36px 42px;
+    color: #333;
+    max-width: 1100px;
+    margin: 34px auto;
+    background-color: #F5EBE0;
+    border-radius: 18px;
+    line-height: 1.75;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+}
+
+/* ===== Headings inside content ===== */
+#content h2 {
+    color: #3d3d3d;
+    font-size: 1.2rem;
+    font-weight: 600;
+    padding-left: 12px;
+    border-left: 4px solid #81b29a;
+    margin-bottom: 14px;
+    margin-top: 24px;
+}
+
+#content h2:first-child {
+    margin-top: 0;
+}
+
+/* ===== Footer ===== */
+#footer {
+    background-color: #F5EBE0;
+    color: #81b29a;
+    text-align: center;
+    padding: 18px 20px;
+    margin-top: 24px;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    border-top: 1px solid #E8DDD4;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0 0 18px 18px;
+}
+
+/* ===== General Typography ===== */
+ul {
+    padding-left: 25px;
+}
+
+p, li {
+    line-height: 1.75;
+}
+
+a {
+    color: #588b8b;
+    text-underline-offset: 3px;
+}
+
+a:hover {
+    color: #81b29a;
+}
+
+iframe {
+    border: none;
+    border-radius: 10px;
+}
+
+div.divider {
+    height: 2px;
+    background-color: #E0D5CC;
+    border: none;
+    border-radius: 4px;
+    margin: 26px 0;
+}
+
+/* ===== Team Member Cards (About Page) ===== */
+.member-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    background-color: #fff;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #F0E8E0;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.member-card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.member-card img {
+    width: 110px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 3px solid #D6CCC2;
+}
+
+.member-card .member-info {
+    flex: 1;
+}
+
+.member-card .role {
+    display: block;
+    color: #588b8b;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-decoration: none;
+}
+
+.member-card .role:hover {
+    color: #81b29a;
+}
+
+.member-card p {
+    margin: 0;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+/* ===== Lab Work ===== */
+.paraAndImg {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+}
+
+.paraAndImg > div {
+    flex: 1;
+}
+
+.paraAndImg img {
+    max-width: 280px;
+    width: 100%;
+    border-radius: 10px;
+    border: 2px solid #D6CCC2;
+    flex-shrink: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* ===== Responsive ===== */
+@media (min-width: 700px) {
+    #logo {
+        width: 20%;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+}
+
+@media (max-width: 700px) {
+    #header {
+        flex-direction: column;
+        text-align: center;
+        padding: 16px;
+    }
+
+    #nav {
+        justify-content: center;
+    }
+
+    a.navlink {
+        width: 90%;
+    }
+
+    #content {
+        width: 95%;
+        padding: 22px 18px;
+        margin: 18px auto;
+    }
+
+    #footer {
+        width: 95%;
+        border-radius: 0 0 14px 14px;
+    }
+
+    .member-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .member-card img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .paraAndImg {
+        flex-direction: column;
+    }
+
+    .paraAndImg img {
+        max-width: 100%;
+    }
+}
