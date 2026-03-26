@@ -16,7 +16,7 @@
 
     <div id="nav">
         <a class="navlink" href="index.html">Home</a>
-        <a class="navlink" href="about.html">About</a>
+        <a class="navlink" href="newABout.html">About</a>
         <a class="navlink" href="project.html">Project</a>
         <a class="navlink active" href="developmentplan.html">Development Plan</a>
         <a class="navlink" href="showcase.html">Showcase</a>
@@ -51,97 +51,97 @@
 
         <p><strong>3. Data Description</strong></p>
 
-        <p>1 &mdash; USERS</p>
+        <p>1 - USERS</p>
         <p>Why it is needed: This table is needed to store each person who can log in and use the calendar system.</p>
         <p>What it stores: It stores account and identity information for each user.</p>
         <ul>
-            <li>user_id &mdash; INT &mdash; Primary Key</li>
-            <li>username &mdash; VARCHAR(50)</li>
-            <li>email &mdash; VARCHAR(100)</li>
-            <li>password_hash &mdash; VARCHAR(255)</li>
-            <li>created_at &mdash; DATETIME</li>
+            <li>user_id - INT - Primary Key</li>
+            <li>username - VARCHAR(50)</li>
+            <li>email - VARCHAR(100)</li>
+            <li>password_hash - VARCHAR(255)</li>
+            <li>created_at - DATETIME</li>
         </ul>
 
-        <p>2 &mdash; GROUPS</p>
+        <p>2 - GROUPS</p>
         <p>Why it is needed: This table is needed to represent shared groups that have their own calendars.</p>
         <p>What it stores: It stores basic information about each group, such as its name and who created it.</p>
         <ul>
-            <li>group_id &mdash; INT &mdash; Primary Key</li>
-            <li>group_name &mdash; VARCHAR(100)</li>
-            <li>description &mdash; TEXT</li>
-            <li>created_by &mdash; INT</li>
-            <li>created_at &mdash; DATETIME</li>
+            <li>group_id - INT - Primary Key</li>
+            <li>group_name - VARCHAR(100)</li>
+            <li>description - TEXT</li>
+            <li>created_by - INT</li>
+            <li>created_at - DATETIME</li>
         </ul>
 
-        <p>3 &mdash; GROUP_MEMBERS</p>
+        <p>3 - GROUP_MEMBERS</p>
         <p>Why it is needed: This table is needed because one user can belong to many groups, and one group can
             contain many users.</p>
         <p>What it stores: It stores the membership relationship between users and groups, along with each member's
             role.</p>
         <ul>
-            <li>membership_id &mdash; INT &mdash; Primary Key</li>
-            <li>group_id &mdash; INT</li>
-            <li>user_id &mdash; INT</li>
-            <li>role &mdash; VARCHAR(20)</li>
-            <li>joined_at &mdash; DATETIME</li>
+            <li>membership_id - INT - Primary Key</li>
+            <li>group_id - INT</li>
+            <li>user_id - INT</li>
+            <li>role - VARCHAR(20)</li>
+            <li>joined_at - DATETIME</li>
         </ul>
 
-        <p>4 &mdash; EVENTS</p>
+        <p>4 - EVENTS</p>
         <p>Why it is needed: This table is needed to store all calendar events, whether they belong to a user's
             personal calendar or a group calendar.</p>
         <p>What it stores: It stores event details such as title, description, start and end times, creator, and
             ownership.</p>
         <ul>
-            <li>event_id &mdash; INT &mdash; Primary Key</li>
-            <li>title &mdash; VARCHAR(100)</li>
-            <li>description &mdash; TEXT</li>
-            <li>start_time &mdash; DATETIME</li>
-            <li>end_time &mdash; DATETIME</li>
-            <li>created_by &mdash; INT</li>
-            <li>owner_user_id &mdash; INT &mdash; nullable</li>
-            <li>owner_group_id &mdash; INT &mdash; nullable</li>
-            <li>location &mdash; VARCHAR(150)</li>
-            <li>is_all_day &mdash; BOOLEAN</li>
-            <li>created_at &mdash; DATETIME</li>
-            <li>updated_at &mdash; DATETIME</li>
-            <li>anonymous &mdash; BOOLEAN</li>
-            <li>importance &mdash; INT</li>
+            <li>event_id - INT - Primary Key</li>
+            <li>title - VARCHAR(100)</li>
+            <li>description - TEXT</li>
+            <li>start_time - DATETIME</li>
+            <li>end_time - DATETIME</li>
+            <li>created_by - INT</li>
+            <li>owner_user_id - INT - nullable</li>
+            <li>owner_group_id - INT - nullable</li>
+            <li>location - VARCHAR(150)</li>
+            <li>is_all_day - BOOLEAN</li>
+            <li>created_at - DATETIME</li>
+            <li>updated_at - DATETIME</li>
+            <li>anonymous - BOOLEAN</li>
+            <li>importance - INT</li>
         </ul>
 
-        <p>5 &mdash; RECURRING_EVENT</p>
+        <p>5 - RECURRING_EVENT</p>
         <p>Why it is needed: This table is needed to store the repetition pattern for events that occur regularly.</p>
         <p>What it stores: It stores recurrence rules linked to an event, including how often it repeats and when
             the repetition ends.</p>
         <ul>
-            <li>recurring_id &mdash; INT &mdash; Primary Key</li>
-            <li>event_id &mdash; INT</li>
-            <li>repeat_type &mdash; VARCHAR(20)</li>
-            <li>interval_value &mdash; INT</li>
-            <li>days_of_week &mdash; VARCHAR(20) &mdash; nullable</li>
-            <li>end_date &mdash; DATETIME &mdash; nullable</li>
-            <li>occurrence_count &mdash; INT &mdash; nullable</li>
+            <li>recurring_id - INT - Primary Key</li>
+            <li>event_id - INT</li>
+            <li>repeat_type - VARCHAR(20)</li>
+            <li>interval_value - INT</li>
+            <li>days_of_week - VARCHAR(20) - nullable</li>
+            <li>end_date - DATETIME - nullable</li>
+            <li>occurrence_count - INT - nullable</li>
         </ul>
 
-        <p>6 &mdash; EVENT_EXCEPTIONS</p>
+        <p>6 - EVENT_EXCEPTIONS</p>
         <p>Why it is needed: This table is needed to handle special cases where one occurrence of a recurring event
             is changed, skipped, or cancelled without changing the entire series.</p>
         <p>What it stores: It stores modifications for individual occurrences of recurring events.</p>
         <ul>
-            <li>exception_id &mdash; INT &mdash; Primary Key</li>
-            <li>recurring_id &mdash; INT</li>
-            <li>original_date &mdash; DATETIME</li>
-            <li>is_cancelled &mdash; BOOLEAN</li>
-            <li>new_start_time &mdash; DATETIME &mdash; nullable</li>
-            <li>new_end_time &mdash; DATETIME &mdash; nullable</li>
-            <li>new_title &mdash; VARCHAR(100) &mdash; nullable</li>
-            <li>new_description &mdash; TEXT &mdash; nullable</li>
+            <li>exception_id - INT - Primary Key</li>
+            <li>recurring_id - INT</li>
+            <li>original_date - DATETIME</li>
+            <li>is_cancelled - BOOLEAN</li>
+            <li>new_start_time - DATETIME - nullable</li>
+            <li>new_end_time - DATETIME - nullable</li>
+            <li>new_title - VARCHAR(100) - nullable</li>
+            <li>new_description - TEXT - nullable</li>
         </ul>
 
         <div class="divider"></div>
 
         <p><strong>4. Functions Performed by the App</strong></p>
 
-        <p>1 &mdash; User Registration and Login</p>
+        <p>1 - User Registration and Login</p>
         <ul>
             <li>Users can create an account and log into the system to access their personal and shared schedules.</li>
             <li>Database Effect
@@ -152,7 +152,7 @@
             </li>
         </ul>
 
-        <p>2 &mdash; Create and Manage Personal Events</p>
+        <p>2 - Create and Manage Personal Events</p>
         <ul>
             <li>Users can create events in their personal calendar, including title, time, location, and description.</li>
             <li>Users can optionally mark events as anonymous.</li>
@@ -166,7 +166,7 @@
             </li>
         </ul>
 
-        <p>3 &mdash; View Calendar (Daily / Weekly / Monthly)</p>
+        <p>3 - View Calendar (Daily / Weekly / Monthly)</p>
         <ul>
             <li>Users can view their schedule in different formats, with events clearly displayed.</li>
             <li>Responsive design supports both desktop and mobile devices.</li>
@@ -177,7 +177,7 @@
             </li>
         </ul>
 
-        <p>4 &mdash; Create and Manage Groups</p>
+        <p>4 - Create and Manage Groups</p>
         <ul>
             <li>Users can create groups to share schedules with others and collaborate.</li>
             <li>Database Effect
@@ -189,7 +189,7 @@
             </li>
         </ul>
 
-        <p>5 &mdash; Share Events with Groups</p>
+        <p>5 - Share Events with Groups</p>
         <ul>
             <li>Users can assign events to a group so all members can view them.</li>
             <li>Database Effect
@@ -200,7 +200,7 @@
             </li>
         </ul>
 
-        <p>6 &mdash; View Other Users' Schedules</p>
+        <p>6 - View Other Users' Schedules</p>
         <ul>
             <li>Users can view the schedules of group members to coordinate activities.</li>
             <li>Database Effect
@@ -211,7 +211,7 @@
             </li>
         </ul>
 
-        <p>7 &mdash; Daily Comparison View</p>
+        <p>7 - Daily Comparison View</p>
         <ul>
             <li>Users can select a specific day to compare schedules and see availability across multiple users.</li>
             <li>Shows distribution of event priorities across users for the selected day.</li>
@@ -222,7 +222,7 @@
             </li>
         </ul>
 
-        <p>8 &mdash; Free Time Finder</p>
+        <p>8 - Free Time Finder</p>
         <ul>
             <li>The app calculates shared free time between users to help schedule meetings or study sessions.</li>
             <li>Supports priority-based scheduling (events have importance levels).</li>
@@ -234,7 +234,7 @@
             </li>
         </ul>
 
-        <p>9 &mdash; Recurring Events</p>
+        <p>9 - Recurring Events</p>
         <ul>
             <li>Users can create events that repeat daily, weekly, or monthly.</li>
             <li>Database Effect
@@ -245,7 +245,7 @@
             </li>
         </ul>
 
-        <p>10 &mdash; Modify or Skip Recurring Events</p>
+        <p>10 - Modify or Skip Recurring Events</p>
         <ul>
             <li>Users can modify or cancel specific instances of recurring events.</li>
             <li>Database Effect
@@ -256,7 +256,7 @@
             </li>
         </ul>
 
-        <p>11 &mdash; Offline Viewing (Cached Data)</p>
+        <p>11 - Offline Viewing (Cached Data)</p>
         <ul>
             <li>Users can view previously loaded schedules even without an internet connection.</li>
             <li>Client-side Implementation
@@ -266,12 +266,12 @@
             </li>
         </ul>
 
-        <p>12 &mdash; Event Importance (Optional Optimization Feature)</p>
+        <p>12 - Event Importance (Optional Optimization Feature)</p>
         <ul>
             <li>Users can assign importance levels to events to assist in scheduling decisions.</li>
         </ul>
 
-        <p>13 &mdash; Import Schedule from Mosaic</p>
+        <p>13 - Import Schedule from Mosaic</p>
         <ul>
             <li>Users can import class schedules from McMaster Mosaic to avoid manual input.</li>
             <li>Database Effect
@@ -285,10 +285,10 @@
 
         <p><strong>5. Work Split</strong></p>
         <ul>
-            <li>(Mazen) Calendar view &mdash; Lots of display work, will have to interpret backend data</li>
-            <li>(Taewoo) Login and Account settings &mdash; User auth work</li>
-            <li>(Erfan) Event Adding &mdash; Will need to encode data that gets displayed on the calendar</li>
-            <li>(Marcus) Event Sharing &mdash; Need to deal with mix of account auth and data encoding</li>
+            <li>(Mazen) Calendar view - Lots of display work, will have to interpret backend data</li>
+            <li>(Taewoo) Login and Account settings - User auth work</li>
+            <li>(Erfan) Event Adding - Will need to encode data that gets displayed on the calendar</li>
+            <li>(Marcus) Event Sharing - Need to deal with mix of account auth and data encoding</li>
         </ul>
 
         <div class="divider"></div>
