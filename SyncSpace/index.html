@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncSpace - Calendar App</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="logo-area">
+            <img src="images/logo.png" alt="SyncSpace Logo" class="logo-img large-logo">
+        </div>
+
+        <nav class="main-nav">
+            <a href="#" class="active">Dashboard</a>
+            <a href="#">My Calendar</a>
+            <a href="#">Groups</a>
+            <a href="#">Events</a>
+
+            <!-- Profile Button -->
+            <div class="profile-menu">
+                <button class="profile-btn">
+                    <span class="profile-avatar">SU</span>
+                </button>
+
+                <div class="profile-dropdown">
+                    <a href="#">Profile</a>
+                    <a href="#">Settings</a>
+                    <a href="#">Logout</a>
+                </div>
+            </div>
+        </nav>
+        </nav>
+    </header>
+
+    <!-- Main Page Layout -->
+    <main class="app-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <section class="sidebar-card profile-card">
+                <h2>User Panel</h2>
+                <p><strong>Name:</strong> </p>
+                <p><strong>Status:</strong> </p>
+                <button class="primary-btn">+ Add Event</button>
+            </section>
+
+            <section class="sidebar-card">
+                <h2>Quick Actions</h2>
+
+                <button class="primary-btn full-btn">+ Create Personal Event</button>
+                <button class="primary-btn full-btn">+ Create Group Event</button>
+
+                <ul class="quick-links">
+                    <li><a href="#">Compare Schedules</a></li>
+                    <li><a href="#">Find Free Time</a></li>
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="main-content">
+            <!-- Different View Buttons -->
+            <div class="view-switcher">
+                <button class="view-btn active">Monthly</button>
+                <button class="view-btn">Weekly</button>
+                <button class="view-btn">Daily</button>
+            </div>
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <div class="section-header">
+                    <h2>Monthly Calendar View</h2>
+                    <div class="calendar-controls">
+                        <button>&lt;</button>
+                        <span>April 2026</span>
+                        <button>&gt;</button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="day-name">Sun</div>
+                    <div class="day-name">Mon</div>
+                    <div class="day-name">Tue</div>
+                    <div class="day-name">Wed</div>
+                    <div class="day-name">Thu</div>
+                    <div class="day-name">Fri</div>
+                    <div class="day-name">Sat</div>
+
+                    <div class="day empty"></div>
+                    <div class="day empty"></div>
+                    <div class="day"><span class="date">1</span></div>
+                    <div class="day"><span class="date">2</span></div>
+                    <div class="day">
+                        <span class="date">3</span>
+                        <div class="event-pill high">Physics Midterm</div>
+                    </div>
+                    <div class="day"><span class="date">4</span></div>
+                    <div class="day"><span class="date">5</span></div>
+
+                    <div class="day"><span class="date">6</span></div>
+                    <div class="day"><span class="date">7</span></div>
+                    <div class="day">
+                        <span class="date">8</span>
+                        <div class="event-pill medium">Club Meeting</div>
+                    </div>
+                    <div class="day"><span class="date">9</span></div>
+                    <div class="day">
+                        <span class="date">10</span>
+                        <div class="event-pill high">Quiz</div>
+                        <div class="event-pill low">Reading</div>
+                    </div>
+                    <div class="day"><span class="date">11</span></div>
+                    <div class="day">
+                        <span class="date">12</span>
+                        <div class="event-pill low">Project Work</div>
+                    </div>
+
+                    <div class="day"><span class="date">13</span></div>
+                    <div class="day"><span class="date">14</span></div>
+                    <div class="day"><span class="date">15</span></div>
+                    <div class="day"><span class="date">16</span></div>
+                    <div class="day"><span class="date">17</span></div>
+                    <div class="day"><span class="date">18</span></div>
+                    <div class="day"><span class="date">19</span></div>
+
+                    <div class="day"><span class="date">20</span></div>
+
+                    <div class="day">
+                        <span class="date">21</span>
+                        <div class="event-pill medium">Study Group</div>
+                    </div>
+                    <div class="day"><span class="date">22</span></div>
+                    <div class="day active-day">
+                        <span class="date">23</span>
+                        <div class="event-pill high">Team Meeting</div>
+                    </div>
+                    <div class="day"><span class="date">24</span></div>
+                    <div class="day"><span class="date">25</span></div>
+                    <div class="day"><span class="date">26</span></div>
+
+                    <div class="day"><span class="date">27</span></div>
+                    <div class="day"><span class="date">28</span></div>
+                    <div class="day"><span class="date">29</span></div>
+                    <div class="day"><span class="date">30</span></div>
+                    <div class="day empty"></div>
+                    <div class="day empty"></div>
+                    <div class="day empty"></div>
+                </div>
+            </section>
+
+            <!-- Bottom Panels -->
+            <section class="bottom-grid">
+                <article class="panel">
+                    <h2>Upcoming Events</h2>
+                    <ul class="event-list">
+                        <li class="event-list-high">
+                            <strong>Physics Midterm</strong>
+                            <span>April 3 - 10:00 AM</span>
+                        </li>
+                        <li class="event-list-medium">
+                            <strong>Club Meeting</strong>
+                            <span>April 8 - 2:00 PM</span>
+                        </li>
+                        <li class="event-list-low">
+                            <strong>Project Work</strong>
+                            <span>April 12 - 6:00 PM</span>
+                        </li>
+                    </ul>
+                </article>
+
+                <article class="panel">
+                    <h2>Shared Availability</h2>
+                    <p>Best common free time:</p>
+                    <div class="availability-box">Wednesday, 3:00 PM - 5:00 PM</div>
+                </article>
+            </section>
+            <section class="priority-legend panel">
+                <div class="legend-header">
+                    <h2>Event Priority Legend</h2>
+                    <button class="primary-btn edit-btn">Edit Priority Colours</button>
+                </div>
+
+                <div class="legend-items">
+                    <div class="legend-item">
+                        <span class="legend-color high-color"></span>
+                        <span>High Priority</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-color medium-color"></span>
+                        <span>Medium Priority</span>
+                    </div>
+
+                    <div class="legend-item">
+                        <span class="legend-color low-color"></span>
+                        <span>Low Priority</span>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <p>&copy; 2026 KARZ inc. | SyncSpace Calendar App</p>
+    </footer>
+
+</body>
+
+</html>
