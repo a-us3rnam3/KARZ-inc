@@ -29,6 +29,7 @@
                 </button>
 
                 <div class="profile-dropdown">
+                    
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
                     <a href="#">Logout</a>
@@ -47,14 +48,14 @@
                 <h2>User Panel</h2>
                 <p><strong>Name:</strong> </p>
                 <p><strong>Status:</strong> </p>
-                <button class="primary-btn">+ Add Event</button>
+                <button class="primary-btn open-add-modal">+ Add Event</button>
             </section>
 
             <section class="sidebar-card">
                 <h2>Quick Actions</h2>
 
-                <button class="primary-btn full-btn">+ Create Personal Event</button>
-                <button class="primary-btn full-btn">+ Create Group Event</button>
+                <button class="primary-btn full-btn open-add-modal">+ Create Personal Event</button>
+                <button class="primary-btn full-btn open-add-modal">+ Create Group Event</button>
 
                 <ul class="quick-links">
                     <li><a href="#">Compare Schedules</a></li>
@@ -82,95 +83,16 @@
                     </div>
                 </div>
 
-                <div class="calendar-grid">
-                    <div class="day-name">Sun</div>
-                    <div class="day-name">Mon</div>
-                    <div class="day-name">Tue</div>
-                    <div class="day-name">Wed</div>
-                    <div class="day-name">Thu</div>
-                    <div class="day-name">Fri</div>
-                    <div class="day-name">Sat</div>
-
-                    <div class="day empty"></div>
-                    <div class="day empty"></div>
-                    <div class="day"><span class="date">1</span></div>
-                    <div class="day"><span class="date">2</span></div>
-                    <div class="day">
-                        <span class="date">3</span>
-                        <div class="event-pill high">Physics Midterm</div>
-                    </div>
-                    <div class="day"><span class="date">4</span></div>
-                    <div class="day"><span class="date">5</span></div>
-
-                    <div class="day"><span class="date">6</span></div>
-                    <div class="day"><span class="date">7</span></div>
-                    <div class="day">
-                        <span class="date">8</span>
-                        <div class="event-pill medium">Club Meeting</div>
-                    </div>
-                    <div class="day"><span class="date">9</span></div>
-                    <div class="day">
-                        <span class="date">10</span>
-                        <div class="event-pill high">Quiz</div>
-                        <div class="event-pill low">Reading</div>
-                    </div>
-                    <div class="day"><span class="date">11</span></div>
-                    <div class="day">
-                        <span class="date">12</span>
-                        <div class="event-pill low">Project Work</div>
-                    </div>
-
-                    <div class="day"><span class="date">13</span></div>
-                    <div class="day"><span class="date">14</span></div>
-                    <div class="day"><span class="date">15</span></div>
-                    <div class="day"><span class="date">16</span></div>
-                    <div class="day"><span class="date">17</span></div>
-                    <div class="day"><span class="date">18</span></div>
-                    <div class="day"><span class="date">19</span></div>
-
-                    <div class="day"><span class="date">20</span></div>
-
-                    <div class="day">
-                        <span class="date">21</span>
-                        <div class="event-pill medium">Study Group</div>
-                    </div>
-                    <div class="day"><span class="date">22</span></div>
-                    <div class="day active-day">
-                        <span class="date">23</span>
-                        <div class="event-pill high">Team Meeting</div>
-                    </div>
-                    <div class="day"><span class="date">24</span></div>
-                    <div class="day"><span class="date">25</span></div>
-                    <div class="day"><span class="date">26</span></div>
-
-                    <div class="day"><span class="date">27</span></div>
-                    <div class="day"><span class="date">28</span></div>
-                    <div class="day"><span class="date">29</span></div>
-                    <div class="day"><span class="date">30</span></div>
-                    <div class="day empty"></div>
-                    <div class="day empty"></div>
-                    <div class="day empty"></div>
-                </div>
+                <!-- Populated dynamically by js/events.js -->
+                <div class="calendar-grid"></div>
             </section>
 
             <!-- Bottom Panels -->
             <section class="bottom-grid">
                 <article class="panel">
                     <h2>Upcoming Events</h2>
-                    <ul class="event-list">
-                        <li class="event-list-high">
-                            <strong>Physics Midterm</strong>
-                            <span>April 3 - 10:00 AM</span>
-                        </li>
-                        <li class="event-list-medium">
-                            <strong>Club Meeting</strong>
-                            <span>April 8 - 2:00 PM</span>
-                        </li>
-                        <li class="event-list-low">
-                            <strong>Project Work</strong>
-                            <span>April 12 - 6:00 PM</span>
-                        </li>
-                    </ul>
+                    <!-- Populated dynamically by js/events.js -->
+                    <ul class="event-list"></ul>
                 </article>
 
                 <article class="panel">
@@ -210,6 +132,142 @@
     <footer class="site-footer">
         <p>&copy; 2026 KARZ inc. | SyncSpace Calendar App</p>
     </footer>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         Add Event Modal
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="event-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+        <div class="modal-card">
+
+            <div class="modal-header">
+                <h2 id="modal-heading">Add Event</h2>
+                <button class="modal-close-x modal-dismiss" type="button" aria-label="Close">&times;</button>
+            </div>
+
+            <form id="event-form" novalidate>
+
+                <div class="form-group">
+                    <label for="event-title">Title <span class="required">*</span></label>
+                    <input type="text" id="event-title" name="event-title"
+                           placeholder="Event title" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="event-date">Date <span class="required">*</span></label>
+                    <input type="date" id="event-date" name="event-date" required>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="event-allday" name="event-allday">
+                        All Day
+                    </label>
+                </div>
+
+                <!-- Hidden when All Day is checked -->
+                <div id="time-fields" class="form-grid-2">
+                    <div class="form-group">
+                        <label for="event-start">Start Time</label>
+                        <input type="time" id="event-start" name="event-start">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end">End Time</label>
+                        <input type="time" id="event-end" name="event-end">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" name="event-location"
+                           placeholder="Optional location" maxlength="150">
+                </div>
+
+                <div class="form-group">
+                    <label for="event-desc">Description</label>
+                    <textarea id="event-desc" name="event-desc" rows="3"
+                              placeholder="Optional description"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-priority">Priority</label>
+                    <select id="event-priority" name="event-priority">
+                        <option value="high">High</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-owner">Event Type</label>
+                    <select id="event-owner" name="event-owner">
+                        <option value="personal">Personal</option>
+                        <option value="group">Group</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="event-anon" name="event-anon">
+                        Anonymous &mdash; hide all details from others; only time &amp; priority visible
+                    </label>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn modal-dismiss">Cancel</button>
+                    <button type="submit" class="primary-btn">Save Event</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         Event Detail Modal
+         ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-card">
+
+            <div class="modal-header">
+                <h2 id="detail-title"></h2>
+                <button class="modal-close-x detail-dismiss" type="button" aria-label="Close">&times;</button>
+            </div>
+
+            <div class="detail-body">
+                <div class="detail-row">
+                    <span class="detail-label">Date</span>
+                    <span id="detail-date"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Time</span>
+                    <span id="detail-time"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Location</span>
+                    <span id="detail-location"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Description</span>
+                    <span id="detail-desc"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Priority</span>
+                    <span id="detail-priority" class="detail-priority-badge"></span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Anonymous</span>
+                    <span id="detail-anon"></span>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="danger-btn" id="detail-delete-btn">Delete Event</button>
+                <button type="button" class="primary-btn detail-dismiss">Close</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/events.js"></script>
 
 </body>
 
