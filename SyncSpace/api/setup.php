@@ -94,6 +94,22 @@ $tables['event_exceptions'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
+// UNIQUE KEY is very useful for preventing dupes
+// Join table to allow for an event to linked to as many groups as needed
+// ─── EVENT_GROUPS ─────────────────────────────────────────────────────────
+$tables['event_groups'] = "
+    CREATE TABLE IF NOT EXISTS event_groups (
+        event_group_id INT AUTO_INCREMENT PRIMARY KEY,
+        event_id INT NOT NULL,
+        group_id INT NOT NULL,
+
+        UNIQUE KEY unique_event_group (event_id, group_id),
+
+        FOREIGN KEY (event_id) REFERENCES events(event_id) ON DELETE CASCADE,
+        FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE 
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+";
+
 // ─── Run ──────────────────────────────────────────────────────────────────────
 
 $results = [];
