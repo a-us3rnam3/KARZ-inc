@@ -72,7 +72,7 @@ function openDetailModal(ev) {
     const modal  = document.getElementById('detail-modal');
     const start  = new Date(ev.start_time);
     const end    = new Date(ev.end_time);
-    const hidden = ev.anonymous;
+    const hidden = isHidden(ev);
 
     document.getElementById('detail-title').textContent    = hidden ? '(Anonymous Event)' : ev.title;
     document.getElementById('detail-date').textContent     = start.toLocaleDateString('en-US',
@@ -335,7 +335,7 @@ function renderDaily() {
                 const pill = makePill(ev);
                 const s    = new Date(ev.start_time);
                 const e2   = new Date(ev.end_time);
-                if (!ev.anonymous) pill.textContent = `${ev.title} (${fmt12(s)}–${fmt12(e2)})`;
+                if (!isHidden(ev)) pill.textContent = `${ev.title} (${fmt12(s)}–${fmt12(e2)})`;
                 cell.appendChild(pill);
             });
 
@@ -351,8 +351,8 @@ function makePill(ev, small = false) {
     const pill     = document.createElement('div');
     pill.className = `event-pill ${ev.priority}`;
     if (small) pill.style.fontSize = '0.65rem';
-    pill.textContent = ev.anonymous ? '(Private)' : ev.title;
-    pill.title       = ev.anonymous ? 'Anonymous — time blocked'
+    pill.textContent = isHidden(ev) ? '(Private)' : ev.title;
+    pill.title       = isHidden(ev) ? 'Anonymous — time blocked'
                                     : `${ev.title}${ev.location ? ' @ ' + ev.location : ''}`;
     pill.addEventListener('click', e => { e.stopPropagation(); openDetailModal(ev); });
     return pill;
@@ -382,8 +382,8 @@ function updateUpcomingEvents() {
         const dateStr = start.toLocaleDateString('en-US', { month:'short', day:'numeric' });
         const timeStr = ev.is_all_day ? 'All Day' : fmt12(start);
         li.innerHTML  = `
-            <strong>${ev.anonymous ? '(Anonymous)' : ev.title}</strong>
-            <span>${dateStr} – ${timeStr}${ev.location && !ev.anonymous ? ' @ ' + ev.location : ''}</span>
+            <strong>${isHidden(ev) ? '(Anonymous)' : ev.title}</strong>
+            <span>${dateStr} – ${timeStr}${ev.location && !isHidden(ev) ? ' @ ' + ev.location : ''}</span>
         `;
         li.style.cursor = 'pointer';
         li.addEventListener('click', () => openDetailModal(ev));
@@ -435,6 +435,11 @@ function initNavigation() {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
+
+// Anonymous events are only hidden from others — the owner always sees full details
+function isHidden(ev) {
+    return ev.anonymous && ev.owner_user_id !== CURRENT_USER_ID;
+}
 
 function sameDay(isoStr, year, month, date) {
     const d = new Date(isoStr);
