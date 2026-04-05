@@ -102,6 +102,7 @@ $tables['event_groups'] = "
         event_group_id INT AUTO_INCREMENT PRIMARY KEY,
         event_id INT NOT NULL,
         group_id INT NOT NULL,
+        is_anonym_in_group TINYINT(1) NOT NULL DEFAULT 0,
 
         UNIQUE KEY unique_event_group (event_id, group_id),
 

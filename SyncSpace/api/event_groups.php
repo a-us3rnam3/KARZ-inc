@@ -24,10 +24,7 @@ $group_id = isset($data['group_id']) ? (int) $data['group_id'] : null;
 $anonymous = isset($data['anonymous']) ? (bool) $data['anonymous'] : false;
 
 // Validate input
-if (
-    $event_id === false || $event_id === null ||
-    $group_id === false || $group_id === null
-) {
+if (!$event_id || !$group_id) {
 
     echo json_encode([
         "success" => false,
@@ -38,7 +35,7 @@ if (
 
 try {
     // 1. Check if event exists
-    $stmt = $pdo->prepare("SELECT event_id FROM EVENTS WHERE event_id = ?");
+    $stmt = $pdo->prepare("SELECT event_id FROM events WHERE event_id = ? LIMIT 1");
     $stmt->execute([$event_id]);
 
     if ($stmt->rowCount() === 0) {
@@ -50,7 +47,7 @@ try {
     }
 
     // 2. Check if group exists
-    $stmt = $pdo->prepare("SELECT group_id FROM GROUPS WHERE group_id = ?");
+    $stmt = $pdo->prepare("SELECT group_id FROM user_groups WHERE group_id = ? LIMIT 1");
     $stmt->execute([$group_id]);
 
     if ($stmt->rowCount() === 0) {
@@ -64,7 +61,7 @@ try {
     // 3. Prevent duplicate sharing
     $stmt = $pdo->prepare("
         SELECT event_group_id 
-        FROM EVENT_GROUPS 
+        FROM event_groups 
         WHERE event_id = ? AND group_id = ?
     ");
     $stmt->execute([$event_id, $group_id]);
@@ -77,12 +74,12 @@ try {
         exit;
     }
 
-    // 4. Insert into EVENT_GROUPS
+    // 4. Insert into event_groups
     $stmt = $pdo->prepare("
-    INSERT INTO EVENT_GROUPS (event_id, group_id, anonymous)
+    INSERT INTO event_groups (event_id, group_id, is_anonym_in_group)
     VALUES (?, ?, ?)
     ");
-    $stmt->execute([$event_id, $group_id, $anonymous ? 1 : 0]);
+    $stmt->execute([$event_id, $group_id, (int)$anonymous]);
 
     echo json_encode([
         "success" => true,
