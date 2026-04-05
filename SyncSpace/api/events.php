@@ -15,9 +15,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit(0);
 }
 
+session_start();
 require 'db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['error' => 'Unauthorized']);
+    exit;
+}
+
+$currentUserId = (int)$_SESSION['user_id'];
 
 // ─── GET: return all events ───────────────────────────────────────────────────
 if ($method === 'GET') {
@@ -72,8 +81,8 @@ if ($method === 'POST') {
         ':description'    => $data['description']    ?? '',
         ':start_time'     => $data['start_time'],
         ':end_time'       => $data['end_time'],
-        ':created_by'     => $data['created_by']     ?? 1,
-        ':owner_user_id'  => $data['owner_user_id']  ?? null,
+        ':created_by'     => $currentUserId,
+        ':owner_user_id'  => $data['owner_group_id'] ? null : $currentUserId,
         ':owner_group_id' => $data['owner_group_id'] ?? null,
         ':location'       => $data['location']       ?? '',
         ':is_all_day'     => $data['is_all_day']     ? 1 : 0,

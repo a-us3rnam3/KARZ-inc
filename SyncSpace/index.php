@@ -1,3 +1,12 @@
+<?php
+require_once 'api/auth.php';
+require_login();
+
+$username = $_SESSION['username'] ?? 'User';
+$email = $_SESSION['email'] ?? '';
+$initials = strtoupper(substr($username, 0, 1));
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -26,17 +35,16 @@
             <!-- Profile Button -->
             <div class="profile-menu">
                 <button class="profile-btn">
-                    <span class="profile-avatar">SU</span>
+                    <span class="profile-avatar"><?= htmlspecialchars($initials) ?></span>
                 </button>
 
                 <div class="profile-dropdown">
 
                     <a href="#">Profile</a>
                     <a href="#">Settings</a>
-                    <a href="#">Logout</a>
+                    <a href="logout.php">Logout</a>
                 </div>
             </div>
-        </nav>
         </nav>
     </header>
 
@@ -47,8 +55,9 @@
         <aside class="sidebar">
             <section class="sidebar-card profile-card">
                 <h2>User Panel</h2>
-                <p><strong>Name:</strong> </p>
-                <p><strong>Status:</strong> </p>
+                <p><strong>Name:</strong> <?= htmlspecialchars($username) ?></p>
+                <p><strong>Status:</strong> Logged In</p>
+                <p><strong>Email:</strong> <?= htmlspecialchars($email) ?></p>
                 <button class="primary-btn open-add-modal">+ Add Event</button>
                 <button class="primary-btn open-share-modal">↥ Share Event</button>
             </section>
@@ -314,6 +323,10 @@
         </div>
     </div>
 
+    <script>
+        const CURRENT_USER_ID = <?= (int)$_SESSION['user_id'] ?>;
+        const CURRENT_USERNAME = <?= json_encode($_SESSION['username']) ?>;
+    </script>
     <script src="js/events.js"></script>
 
 </body>

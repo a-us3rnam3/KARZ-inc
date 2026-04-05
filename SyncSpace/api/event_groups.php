@@ -1,10 +1,7 @@
-<!-- 
-TODO
-write up the visual aspect
-implement GET and DELETE
--->
-
 <?php
+/*TODO
+write up the visual aspect
+implement GET and DELETE*/
 // SyncSpace — Events API
 // Marcus Rotaru
 //

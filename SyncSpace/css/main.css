@@ -727,6 +727,69 @@ body {
     background-color: #bfd8b8;
 }
 
+/* ─── Auth Pages (Login / Register) ───────────────────────────────────── */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background-color: #f4f4ef;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background-color: #ecece3;
+    border: 1px solid #d3d3ca;
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.auth-card h1 {
+    margin-bottom: 10px;
+    color: #4f544d;
+}
+
+.auth-subtext {
+    margin-bottom: 18px;
+    color: #6e736c;
+}
+
+.auth-message {
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-size: 0.95rem;
+}
+
+.auth-error {
+    background-color: #f7dede;
+    color: #8b2f2f;
+}
+
+.auth-success {
+    background-color: #dff0da;
+    color: #2f6a2f;
+}
+
+.auth-footer {
+    margin-top: 16px;
+    text-align: center;
+}
+
+.auth-footer a {
+    color: #4f544d;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────── */
 
 @media (max-width: 1100px) {

@@ -6,7 +6,7 @@
 'use strict';
 
 const API = 'api/events.php';
-const CURRENT_USER_ID = 1; // Placeholder until Taewoo's auth module is integrated
+// CURRENT_USER_ID is provided by index.php
 
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
@@ -191,14 +191,14 @@ async function handleShareSubmit(e) {
     };
 
     // TODO: connect to backend endpoint
-    await fetch('api/REMOVEAFTERDEMOevent_groups.php', {
+    await fetch('api/event_groups.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
 
     closeShareModal();
-    alert('INSERT SHARE CODE AFTER THIS');
+    alert('Event shared successfully.');
 }
 
 // ─── Calendar Rendering ───────────────────────────────────────────────────────
