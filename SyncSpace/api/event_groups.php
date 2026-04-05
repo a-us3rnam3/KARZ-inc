@@ -17,13 +17,18 @@ require_once 'db.php';
 header('Content-Type: application/json');
 
 // Get POST data
-$event_id = filter_input(INPUT_POST, 'event_id', FILTER_VALIDATE_INT);
-$group_id = filter_input(INPUT_POST, 'group_id', FILTER_VALIDATE_INT);
+$data = json_decode(file_get_contents("php://input"), true);
+
+$event_id = isset($data['event_id']) ? (int) $data['event_id'] : null;
+$group_id = isset($data['group_id']) ? (int) $data['group_id'] : null;
+$anonymous = isset($data['anonymous']) ? (bool) $data['anonymous'] : false;
 
 // Validate input
-if ($event_id === false || $event_id === null ||
-    $group_id === false || $group_id === null) {
-    
+if (
+    $event_id === false || $event_id === null ||
+    $group_id === false || $group_id === null
+) {
+
     echo json_encode([
         "success" => false,
         "message" => "Valid event_id and group_id are required"
@@ -74,10 +79,10 @@ try {
 
     // 4. Insert into EVENT_GROUPS
     $stmt = $pdo->prepare("
-        INSERT INTO EVENT_GROUPS (event_id, group_id)
-        VALUES (?, ?)
+    INSERT INTO EVENT_GROUPS (event_id, group_id, anonymous)
+    VALUES (?, ?, ?)
     ");
-    $stmt->execute([$event_id, $group_id]);
+    $stmt->execute([$event_id, $group_id, $anonymous ? 1 : 0]);
 
     echo json_encode([
         "success" => true,
