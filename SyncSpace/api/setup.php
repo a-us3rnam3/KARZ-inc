@@ -106,7 +106,7 @@ $tables['event_groups'] = "
         UNIQUE KEY unique_event_group (event_id, group_id),
 
         FOREIGN KEY (event_id) REFERENCES events(event_id) ON DELETE CASCADE,
-        FOREIGN KEY (group_id) REFERENCES groups(group_id) ON DELETE CASCADE 
+        FOREIGN KEY (group_id) REFERENCES user_groups(group_id) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
