@@ -122,4 +122,15 @@ foreach ($tables as $name => $sql) {
     }
 }
 
+// ─── Seed: placeholder user so events can be added before auth is integrated ──
+try {
+    $pdo->exec("
+        INSERT IGNORE INTO users (user_id, username, email, password_hash)
+        VALUES (1, 'placeholder', 'placeholder@syncspace.local', 'no-auth-yet')
+    ");
+    $results[] = "✓ placeholder user (id=1)";
+} catch (PDOException $e) {
+    $results[] = "✗ placeholder user — " . $e->getMessage();
+}
+
 echo "<pre>" . implode("\n", $results) . "\n\nDone.</pre>";
