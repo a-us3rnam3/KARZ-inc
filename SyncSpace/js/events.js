@@ -191,14 +191,14 @@ async function handleShareSubmit(e) {
     };
 
     // TODO: connect to backend endpoint
-    await fetch('api/eevnt_groups.php', {
+    await fetch('api/REMOVEAFTERDEMOevent_groups.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
 
     closeShareModal();
-    alert('Event shared successfully!');
+    alert('INSERT SHARE CODE AFTER THIS');
 }
 
 // ─── Calendar Rendering ───────────────────────────────────────────────────────
