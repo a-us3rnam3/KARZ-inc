@@ -10,17 +10,23 @@ $error = $_GET['error'] ?? '';
 $success = $_GET['success'] ?? '';
 ?>
 <!doctype html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <title>Login - SyncSpace</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="images/croppedLogo.png">
 </head>
+
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
+            <div class="logo-area auth-logo">
+                <img src="images/logo.png" alt="SyncSpace Logo" class="logo-img large-logo">
+            </div>
+
             <h1>Welcome Back</h1>
             <p class="auth-subtext">Log in to access your SyncSpace calendar.</p>
 
@@ -54,4 +60,5 @@ $success = $_GET['success'] ?? '';
         </div>
     </div>
 </body>
+
 </html>

@@ -9,17 +9,23 @@ if (isset($_SESSION['user_id'])) {
 $error = $_GET['error'] ?? '';
 ?>
 <!doctype html>
-<html lang="en">
+<html>
+
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <title>Register - SyncSpace</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="images/croppedLogo.png">
 </head>
+
 <body>
     <div class="auth-wrapper">
         <div class="auth-card">
+            <div class="logo-area auth-logo">
+                <img src="images/logo.png" alt="SyncSpace Logo" class="logo-img large-logo">
+            </div>
+
             <h1>Create Account</h1>
             <p class="auth-subtext">Sign up for SyncSpace.</p>
 
@@ -65,4 +71,5 @@ $error = $_GET['error'] ?? '';
         </div>
     </div>
 </body>
+
 </html>

@@ -734,47 +734,60 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 25px;
     background-color: #f4f4ef;
 }
 
 .auth-card {
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     background-color: #ecece3;
-    border: 1px solid #d3d3ca;
+    padding: 24px;
     border-radius: 18px;
-    padding: 28px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    border: 1px solid #d3d3ca;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
 .auth-card h1 {
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    font-size: 1.8rem;
     color: #4f544d;
 }
 
 .auth-subtext {
     margin-bottom: 18px;
     color: #6e736c;
+    font-size: 0.98rem;
 }
 
+/* Logo alignment */
+.auth-logo {
+    text-align: center;
+    margin-bottom: 14px;
+}
+
+/* Messages */
 .auth-message {
-    padding: 10px 12px;
-    border-radius: 10px;
+    padding: 12px 14px;
+    border-radius: 12px;
     margin-bottom: 14px;
     font-size: 0.95rem;
+    border: 1px solid transparent;
 }
 
 .auth-error {
     background-color: #f7dede;
     color: #8b2f2f;
+    border-color: #e8bcbc;
 }
 
 .auth-success {
     background-color: #dff0da;
     color: #2f6a2f;
+    border-color: #bdd9b5;
 }
 
+/* Footer links */
 .auth-footer {
     margin-top: 16px;
     text-align: center;
@@ -788,6 +801,38 @@ body {
 
 .auth-footer a:hover {
     text-decoration: underline;
+}
+
+/* Button alignment */
+.auth-card .modal-actions {
+    justify-content: center;
+}
+
+.auth-card .primary-btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+}
+
+/* Input fields (match site style) */
+.auth-card .form-group input[type="email"],
+.auth-card .form-group input[type="password"],
+.auth-card .form-group input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #c8c7bd;
+    border-radius: 10px;
+    background: #f8f8f3;
+    color: #4f544d;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.auth-card .form-group input:focus {
+    outline: none;
+    border-color: #bfd8b8;
+    background: #ffffff;
 }
 
 /* ─────────────────────────────────────────────────────────────────────────── */
@@ -836,5 +881,20 @@ body {
 
     .main-nav {
         width: 100%;
+    }
+}
+
+@media (max-width: 600px) {
+    .auth-wrapper {
+        padding: 16px;
+    }
+
+    .auth-card {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .auth-card h1 {
+        font-size: 1.5rem;
     }
 }

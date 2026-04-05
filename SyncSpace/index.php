@@ -8,11 +8,11 @@ $initials = strtoupper(substr($username, 0, 1));
 ?>
 
 <!doctype html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <title>SyncSpace - Calendar App</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="shortcut icon" href="images/croppedLogo.png">
