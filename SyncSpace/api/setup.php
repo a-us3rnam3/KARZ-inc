@@ -17,9 +17,9 @@ $tables['users'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── GROUPS ───────────────────────────────────────────────────────────────────
-$tables['groups'] = "
-    CREATE TABLE IF NOT EXISTS `groups` (
+// ─── USER_GROUPS ──────────────────────────────────────────────────────────────
+$tables['user_groups'] = "
+    CREATE TABLE IF NOT EXISTS user_groups (
         group_id    INT           AUTO_INCREMENT PRIMARY KEY,
         group_name  VARCHAR(100)  NOT NULL,
         description TEXT,
@@ -37,7 +37,7 @@ $tables['group_members'] = "
         user_id       INT          NOT NULL,
         role          VARCHAR(20)  NOT NULL DEFAULT 'member',
         joined_at     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (group_id) REFERENCES `groups`(group_id),
+        FOREIGN KEY (group_id) REFERENCES user_groups(group_id),
         FOREIGN KEY (user_id)  REFERENCES users(user_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
@@ -61,7 +61,7 @@ $tables['events'] = "
         updated_at      DATETIME      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         FOREIGN KEY (created_by)      REFERENCES users(user_id),
         FOREIGN KEY (owner_user_id)   REFERENCES users(user_id),
-        FOREIGN KEY (owner_group_id)  REFERENCES `groups`(group_id)
+        FOREIGN KEY (owner_group_id)  REFERENCES user_groups(group_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
