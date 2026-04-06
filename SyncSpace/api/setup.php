@@ -102,7 +102,7 @@ $tables['event_groups'] = "
         event_group_id INT AUTO_INCREMENT PRIMARY KEY,
         event_id INT NOT NULL,
         group_id INT NOT NULL,
-        is_anonym_in_group TINYINT(1) NOT NULL DEFAULT 0,
+        anonymous TINYINT(1) NOT NULL DEFAULT 0,
 
         UNIQUE KEY unique_event_group (event_id, group_id),
 
@@ -121,6 +121,16 @@ foreach ($tables as $name => $sql) {
     } catch (PDOException $e) {
         $results[] = "✗ $name — " . $e->getMessage();
     }
+}
+
+// ─── Migrations: fix existing tables if columns changed ───────────────────────
+// Rename is_anonym_in_group → anonymous if the old column still exists
+try {
+    $pdo->exec("ALTER TABLE event_groups CHANGE is_anonym_in_group anonymous TINYINT(1) NOT NULL DEFAULT 0");
+    $results[] = "✓ migration: event_groups.is_anonym_in_group → anonymous";
+} catch (PDOException $e) {
+    // Column already renamed or doesn't exist — safe to ignore
+    $results[] = "~ migration skipped: " . $e->getMessage();
 }
 
 // ─── Seed: placeholder user so events can be added before auth is integrated ──
