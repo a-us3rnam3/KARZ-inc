@@ -65,43 +65,47 @@ if ($method === 'POST') {
         exit;
     }
 
-    $stmt = $pdo->prepare("
-        INSERT INTO events
-            (title, description, start_time, end_time,
-             created_by, owner_user_id, owner_group_id,
-             location, is_all_day, priority, anonymous)
-        VALUES
-            (:title, :description, :start_time, :end_time,
-             :created_by, :owner_user_id, :owner_group_id,
-             :location, :is_all_day, :priority, :anonymous)
-    ");
+    try {
+        $stmt = $pdo->prepare("
+            INSERT INTO events
+                (title, description, start_time, end_time,
+                 created_by, owner_user_id, owner_group_id,
+                 location, is_all_day, priority, anonymous)
+            VALUES
+                (:title, :description, :start_time, :end_time,
+                 :created_by, :owner_user_id, :owner_group_id,
+                 :location, :is_all_day, :priority, :anonymous)
+        ");
 
-    $stmt->execute([
-        ':title'          => $data['title'],
-        ':description'    => $data['description']    ?? '',
-        ':start_time'     => $data['start_time'],
-        ':end_time'       => $data['end_time'],
-        ':created_by'     => $currentUserId,
-        ':owner_user_id'  => $data['owner_group_id'] ? null : $currentUserId,
-        ':owner_group_id' => $data['owner_group_id'] ?? null,
-        ':location'       => $data['location']       ?? '',
-        ':is_all_day'     => $data['is_all_day']     ? 1 : 0,
-        ':priority'       => $data['priority']       ?? 'medium',
-        ':anonymous'      => $data['anonymous']      ? 1 : 0,
-    ]);
+        $stmt->execute([
+            ':title'          => $data['title'],
+            ':description'    => $data['description']    ?? '',
+            ':start_time'     => $data['start_time'],
+            ':end_time'       => $data['end_time'],
+            ':created_by'     => $currentUserId,
+            ':owner_user_id'  => $currentUserId,
+            ':owner_group_id' => null,
+            ':location'       => $data['location']       ?? '',
+            ':is_all_day'     => $data['is_all_day']     ? 1 : 0,
+            ':priority'       => $data['priority']       ?? 'medium',
+            ':anonymous'      => $data['anonymous']      ? 1 : 0,
+        ]);
 
-    $newId = (int) $pdo->lastInsertId();
+        $newId = (int) $pdo->lastInsertId();
 
-    // Return the full inserted row so JS can update its local list
-    $row = $pdo->query("SELECT * FROM events WHERE event_id = $newId")->fetch(PDO::FETCH_ASSOC);
-    $row['event_id']       = (int)  $row['event_id'];
-    $row['is_all_day']     = (bool) $row['is_all_day'];
-    $row['anonymous']      = (bool) $row['anonymous'];
-    $row['owner_user_id']  = $row['owner_user_id']  !== null ? (int) $row['owner_user_id']  : null;
-    $row['owner_group_id'] = $row['owner_group_id'] !== null ? (int) $row['owner_group_id'] : null;
+        $row = $pdo->query("SELECT * FROM events WHERE event_id = $newId")->fetch(PDO::FETCH_ASSOC);
+        $row['event_id']       = (int)  $row['event_id'];
+        $row['is_all_day']     = (bool) $row['is_all_day'];
+        $row['anonymous']      = (bool) $row['anonymous'];
+        $row['owner_user_id']  = $row['owner_user_id']  !== null ? (int) $row['owner_user_id']  : null;
+        $row['owner_group_id'] = $row['owner_group_id'] !== null ? (int) $row['owner_group_id'] : null;
 
-    http_response_code(201);
-    echo json_encode($row);
+        http_response_code(201);
+        echo json_encode($row);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['error' => $e->getMessage()]);
+    }
     exit;
 }
 

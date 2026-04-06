@@ -9,7 +9,14 @@ implement GET and DELETE*/
 // POST   /api/event_groups.php              — share event with group
 // DELETE /api/event_groups.php              — unshare event from group TO IMPLEMENT
 
+session_start();
 require_once 'db.php';
+
+if (!isset($_SESSION['user_id'])) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Unauthorized']);
+    exit;
+}
 
 header('Content-Type: application/json');
 
@@ -73,8 +80,8 @@ try {
 
     // 4. Insert into event_groups
     $stmt = $pdo->prepare("
-    INSERT INTO event_groups (event_id, group_id, is_anonym_in_group)
-    VALUES (?, ?, ?)
+        INSERT INTO event_groups (event_id, group_id, anonymous)
+        VALUES (?, ?, ?)
     ");
     $stmt->execute([$event_id, $group_id, (int)$anonymous]);
 

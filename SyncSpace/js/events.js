@@ -11,8 +11,13 @@ const API = 'api/events.php';
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
 async function fetchEvents() {
-    const res = await fetch(API);
-    return res.json();
+    try {
+        const res = await fetch(API);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch {
+        return [];
+    }
 }
 
 async function createEvent(payload) {
@@ -21,7 +26,9 @@ async function createEvent(payload) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
     });
-    return res.json();
+    const data = await res.json().catch(() => ({ error: 'Server error — check PHP logs' }));
+    if (!res.ok) throw new Error(data.error || 'Failed to save event');
+    return data;
 }
 
 async function removeEvent(event_id) {
@@ -161,20 +168,23 @@ async function handleFormSubmit(e) {
         start_time: isAllDay ? `${date} 00:00:00` : `${date} ${startT}:00`,
         end_time: isAllDay ? `${date} 23:59:59` : `${date} ${endT}:00`,
         created_by: CURRENT_USER_ID,
-        owner_user_id: form['event-owner'].value === 'personal' ? CURRENT_USER_ID : null,
-        owner_group_id: form['event-owner'].value === 'group' ? 1 : null,
+        owner_user_id: CURRENT_USER_ID,
+        owner_group_id: null,
         location: form['event-location'].value.trim(),
         is_all_day: isAllDay,
         priority: form['event-priority'].value,
         anonymous: form['event-anon'].checked
     };
 
-    const saved = await createEvent(payload);
-    state.events.push(saved);
-
-    closeModal();
-    renderCalendar();
-    updateUpcomingEvents();
+    try {
+        const saved = await createEvent(payload);
+        state.events.push(saved);
+        closeModal();
+        renderCalendar();
+        updateUpcomingEvents();
+    } catch (err) {
+        alert('Could not save event: ' + err.message);
+    }
 }
 
 async function handleShareSubmit(e) {
