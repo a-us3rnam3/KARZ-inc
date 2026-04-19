@@ -110,6 +110,7 @@ function closeDetailModal() {
     document.getElementById('detail-modal').classList.remove('open');
 }
 
+// Marcus Rotaru
 // ─── Share Modal ────────────────────────────────────────────────────────────
 
 function openShareModal() {
