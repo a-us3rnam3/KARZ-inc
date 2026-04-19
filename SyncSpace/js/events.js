@@ -35,6 +35,36 @@ async function removeEvent(event_id) {
     await fetch(`${API}?id=${event_id}`, { method: 'DELETE' });
 }
 
+async function loadGroupsIntoDropdown() {
+    const select = document.getElementById('share-group');
+
+    try {
+        const res = await fetch('api/groups.php');
+        const groups = await res.json();
+
+        select.innerHTML = '';
+
+        if (!groups.length) {
+            const opt = document.createElement('option');
+            opt.textContent = 'No groups available';
+            opt.disabled = true;
+            opt.selected = true;
+            select.appendChild(opt);
+            return;
+        }
+
+        groups.forEach(group => {
+            const opt = document.createElement('option');
+            opt.value = group.group_id;
+            opt.textContent = group.group_name;
+            select.appendChild(opt);
+        });
+
+    } catch (err) {
+        select.innerHTML = '<option disabled>Error loading groups</option>';
+    }
+}
+
 // ─── State ────────────────────────────────────────────────────────────────────
 
 const MONTH_NAMES = [
@@ -113,11 +143,14 @@ function closeDetailModal() {
 // Marcus Rotaru
 // ─── Share Modal ────────────────────────────────────────────────────────────
 
-function openShareModal() {
+async function openShareModal() {
     const modal = document.getElementById('share-modal');
     const eventSelect = document.getElementById('share-event');
 
-    // Clear existing options
+    // Load groups dynamically
+    await loadGroupsIntoDropdown();
+
+    // Existing event logic
     eventSelect.innerHTML = '';
 
     const userEvents = state.events.filter(ev => ev.owner_user_id === CURRENT_USER_ID);
@@ -128,18 +161,14 @@ function openShareModal() {
         return;
     }
 
-    // Populate with user's events only
-    state.events
-        .filter(ev => ev.owner_user_id === CURRENT_USER_ID)
-        .forEach(ev => {
-            const option = document.createElement('option');
-            option.value = ev.event_id;
-            option.textContent = `${ev.title} (${new Date(ev.start_time).toLocaleDateString()})`;
-            eventSelect.appendChild(option);
-        });
+    userEvents.forEach(ev => {
+        const option = document.createElement('option');
+        option.value = ev.event_id;
+        option.textContent = `${ev.title} (${new Date(ev.start_time).toLocaleDateString()})`;
+        eventSelect.appendChild(option);
+    });
 
     eventSelect.selectedIndex = 0;
-
     modal.classList.add('open');
 }
 

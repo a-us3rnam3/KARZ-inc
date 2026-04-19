@@ -29,7 +29,7 @@ $initials = strtoupper(substr($username, 0, 1));
         <nav class="main-nav">
             <a href="#" class="active">Dashboard</a>
             <a href="#">My Calendar</a>
-            <a href="#">Groups</a>
+            <a href="groups.php">Groups</a>
             <a href="#">Events</a>
 
             <!-- Profile Button -->
@@ -299,11 +299,7 @@ $initials = strtoupper(substr($username, 0, 1));
                 <!-- Group Dropdown -->
                 <div class="form-group">
                     <label for="share-group">Select Group</label>
-                    <select id="share-group" required>
-                        <!-- TEMP: Replace with real groups later -->
-                        <option value="1">Group 1</option>
-                        <option value="2">Group 2</option>
-                    </select>
+                    <select id="share-group" required></select>
                 </div>
 
                 <!-- Anonymous Toggle -->
