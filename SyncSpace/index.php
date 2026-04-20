@@ -70,7 +70,7 @@ $initials = strtoupper(substr($username, 0, 1));
 
                 <ul class="quick-links">
                     <li><a href="#">Compare Schedules</a></li>
-                    <li><a href="#">Find Free Time</a></li>
+                    <li><a href="#" id="open-free-time">Find Free Time</a></li>
                 </ul>
             </section>
         </aside>
@@ -316,6 +316,40 @@ $initials = strtoupper(substr($username, 0, 1));
                 </div>
 
             </form>
+        </div>
+    </div>
+    <!-- ═══════════════════════════════════════════════════════════════════════
+     Find Free Time Modal
+     ═══════════════════════════════════════════════════════════════════════ -->
+    <div id="free-time-modal" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-card">
+
+            <div class="modal-header">
+                <h2>Find Free Time</h2>
+                <button class="modal-close-x free-dismiss" type="button">&times;</button>
+            </div>
+
+            <form id="free-time-form">
+
+                <div class="form-group">
+                    <label for="free-group">Select Group</label>
+                    <select id="free-group" required></select>
+                </div>
+
+                <div class="form-group">
+                    <label for="free-date">Select Date</label>
+                    <input type="date" id="free-date" required>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="secondary-btn free-dismiss">Cancel</button>
+                    <button type="submit" class="primary-btn">Find Free Time</button>
+                </div>
+
+            </form>
+
+            <div id="free-time-results" style="margin-top:15px;"></div>
+
         </div>
     </div>
 

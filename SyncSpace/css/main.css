@@ -658,9 +658,18 @@ body {
     display: inline-block;
 }
 
-.priority-high   { background-color: #d96b6b; }
-.priority-medium { background-color: #d8c36a; color: #4f544d; }
-.priority-low    { background-color: #7fbe7a; }
+.priority-high {
+    background-color: #d96b6b;
+}
+
+.priority-medium {
+    background-color: #d8c36a;
+    color: #4f544d;
+}
+
+.priority-low {
+    background-color: #7fbe7a;
+}
 
 .danger-btn {
     border: none;
@@ -707,8 +716,14 @@ body {
     background-color: #f0f0e8;
 }
 
-.today-col    { background-color: #f2f8f0; }
-.current-hour { background-color: #e8f5e3; border-color: #bfd8b8; }
+.today-col {
+    background-color: #f2f8f0;
+}
+
+.current-hour {
+    background-color: #e8f5e3;
+    border-color: #bfd8b8;
+}
 
 .week-day-header {
     display: flex;
@@ -725,6 +740,21 @@ body {
 
 .today-header {
     background-color: #bfd8b8;
+}
+
+/* Free Time Results Styling */
+#free-time-results p {
+    padding: 8px 12px;
+    background-color: #f4f6ff;
+    border-left: 4px solid #4f6ef7;
+    margin: 6px 0;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+#free-time-results h3 {
+    margin-bottom: 10px;
+    color: #333;
 }
 
 /* ─── Auth Pages (Login / Register) ───────────────────────────────────── */

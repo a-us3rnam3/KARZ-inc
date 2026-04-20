@@ -175,6 +175,39 @@ async function openShareModal() {
 function closeShareModal() {
     document.getElementById('share-modal').classList.remove('open');
 }
+//Mazen Anklis
+// ─── Free Time Modal ─────────────────────────────────────────────
+
+async function openFreeTimeModal() {
+    const modal = document.getElementById('free-time-modal');
+    const select = document.getElementById('free-group');
+
+    try {
+        const res = await fetch('api/groups.php');
+        const groups = await res.json();
+
+        select.innerHTML = '';
+
+        groups.forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g.group_id;
+            opt.textContent = g.group_name;
+            select.appendChild(opt);
+        });
+
+    } catch {
+        select.innerHTML = '<option>Error loading groups</option>';
+    }
+
+    document.getElementById('free-date').value = todayStr();
+    document.getElementById('free-time-results').innerHTML = '';
+
+    modal.classList.add('open');
+}
+
+function closeFreeTimeModal() {
+    document.getElementById('free-time-modal').classList.remove('open');
+}
 
 // ─── Form Submission ──────────────────────────────────────────────────────────
 
@@ -229,6 +262,30 @@ async function handleShareSubmit(e) {
         group_id: groupId,
         anonymous: anonymous
     };
+    //Mazen Anklis
+    async function handleFreeTimeSubmit(e) {
+        e.preventDefault();
+
+        const group_id = document.getElementById('free-group').value;
+        const date = document.getElementById('free-date').value;
+
+        const resBox = document.getElementById('free-time-results');
+        resBox.innerHTML = 'Loading...';
+
+        try {
+            const res = await fetch('api/find_free_time.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `group_id=${group_id}&date=${date}`
+            });
+
+            const html = await res.text();
+            resBox.innerHTML = html;
+
+        } catch (err) {
+            resBox.innerHTML = 'Error finding free time.';
+        }
+    }
 
     // TODO: connect to backend endpoint
     await fetch('api/event_groups.php', {
@@ -607,6 +664,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.querySelectorAll('.share-dismiss').forEach(btn =>
         btn.addEventListener('click', closeShareModal)
     );
+    // Open Free Time Modal
+    document.getElementById('open-free-time')
+        .addEventListener('click', e => {
+            e.preventDefault();
+            openFreeTimeModal();
+        });
+
+    // Close Free Time Modal
+    document.querySelectorAll('.free-dismiss')
+        .forEach(btn => btn.addEventListener('click', closeFreeTimeModal));
+
+    // Click outside closes
+    document.getElementById('free-time-modal')
+        .addEventListener('click', e => {
+            if (e.target === e.currentTarget) closeFreeTimeModal();
+        });
+
+    // Submit form
+    document.getElementById('free-time-form')
+        .addEventListener('submit', handleFreeTimeSubmit);
 
     // Click outside to close
     document.getElementById('share-modal').addEventListener('click', e => {
