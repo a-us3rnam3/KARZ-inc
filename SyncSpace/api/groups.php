@@ -12,7 +12,7 @@
 //
 // GET    /api/groups.php
 // POST   /api/groups.php
-// DELETE /api/groups.php
+
 session_start();
 require_once 'db.php';
 
@@ -25,6 +25,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
+$DEBUG = true; // ⚠️ set to false in production
 
 // ─── GET: Fetch user's groups ─────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -70,108 +71,202 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// ─── POST: Create group with usernames ────────────────────
+// ─── POST: Router for group actions ────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = json_decode(file_get_contents("php://input"), true);
 
-    $name = trim($data['group_name'] ?? '');
-    $desc = trim($data['description'] ?? '');
-    $usernames = $data['usernames'] ?? [];
-
-    if (!$name) {
-        echo json_encode(["success" => false, "message" => "Group name required"]);
-        exit;
-    }
+    $action = $data['action'] ?? 'create'; // default = create
 
     try {
-        $pdo->beginTransaction();
 
-        // 1. Create group
-        $stmt = $pdo->prepare("
-            INSERT INTO user_groups (group_name, description, created_by)
-            VALUES (?, ?, ?)
-        ");
-        $stmt->execute([$name, $desc, $user_id]);
-        $group_id = $pdo->lastInsertId();
+        // ─────────────────────────────
+        // CREATE GROUP
+        // ─────────────────────────────
+        if ($action === 'create') {
 
-        // 2. Add creator as owner
-        $stmt = $pdo->prepare("
-            INSERT INTO group_members (group_id, user_id, role)
-            VALUES (?, ?, 'owner')
-        ");
-        $stmt->execute([$group_id, $user_id]);
+            $name = trim($data['group_name'] ?? '');
+            $desc = trim($data['description'] ?? '');
+            $usernames = $data['usernames'] ?? [];
 
-        // 3. Add users by username
-        if (!empty($usernames)) {
+            if (!$name) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Group name required"
+                ]);
+                exit;
+            }
 
-            $stmtUser = $pdo->prepare("SELECT user_id FROM users WHERE username = ?");
-            $stmtInsert = $pdo->prepare("
-                INSERT IGNORE INTO group_members (group_id, user_id)
-                VALUES (?, ?)
+            $pdo->beginTransaction();
+
+            $stmt = $pdo->prepare("
+                INSERT INTO user_groups (group_name, description, created_by)
+                VALUES (?, ?, ?)
             ");
+            $stmt->execute([$name, $desc, $user_id]);
 
-            foreach ($usernames as $uname) {
-                $stmtUser->execute([$uname]);
-                $user = $stmtUser->fetch();
+            $group_id = $pdo->lastInsertId();
 
-                if ($user) {
-                    $stmtInsert->execute([$group_id, $user['user_id']]);
+            // add owner
+            $stmt = $pdo->prepare("
+                INSERT INTO group_members (group_id, user_id, role)
+                VALUES (?, ?, 'owner')
+            ");
+            $stmt->execute([$group_id, $user_id]);
+
+            // add members
+            if (!empty($usernames)) {
+
+                $stmtUser = $pdo->prepare("SELECT user_id FROM users WHERE username = ?");
+                $stmtInsert = $pdo->prepare("
+                    INSERT IGNORE INTO group_members (group_id, user_id)
+                    VALUES (?, ?)
+                ");
+
+                foreach ($usernames as $uname) {
+                    $stmtUser->execute([$uname]);
+                    $user = $stmtUser->fetch();
+
+                    if ($user) {
+                        $stmtInsert->execute([$group_id, $user['user_id']]);
+                    }
                 }
             }
+
+            $pdo->commit();
+
+            echo json_encode([
+                "success" => true,
+                "group_id" => $group_id
+            ]);
+            exit;
         }
 
-        $pdo->commit();
+        // ─────────────────────────────
+        // LEAVE GROUP
+        // ─────────────────────────────
+        if ($action === 'leave') {
 
+            $group_id = (int)($data['group_id'] ?? 0);
+
+            if (!$group_id) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "group_id required"
+                ]);
+                exit;
+            }
+
+            $stmt = $pdo->prepare("
+                SELECT role FROM group_members
+                WHERE group_id = ? AND user_id = ?
+            ");
+            $stmt->execute([$group_id, $user_id]);
+            $member = $stmt->fetch();
+
+            if (!$member) {
+                echo json_encode(["success" => false, "message" => "Not a member"]);
+                exit;
+            }
+
+            if ($member['role'] === 'owner') {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Owner cannot leave group"
+                ]);
+                exit;
+            }
+
+            $stmt = $pdo->prepare("
+                DELETE FROM group_members
+                WHERE group_id = ? AND user_id = ?
+            ");
+            $stmt->execute([$group_id, $user_id]);
+
+            echo json_encode(["success" => true]);
+            exit;
+        }
+
+        // fallback
         echo json_encode([
-            "success" => true,
-            "group_id" => $group_id
+            "success" => false,
+            "message" => "Unknown action"
         ]);
 
     } catch (PDOException $e) {
-        $pdo->rollBack();
-        echo json_encode(["success" => false, "message" => $e->getMessage()]);
-    }
-}
-
-// ─── DELETE: Leave group ─────────────────────────────
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-
-    $data = json_decode(file_get_contents("php://input"), true);
-    $group_id = $data['group_id'] ?? null;
-
-    if (!$group_id) {
-        echo json_encode(["success" => false, "message" => "group_id required"]);
-        exit;
-    }
-
-    // prevent owner from leaving (optional safety)
-    $stmt = $pdo->prepare("
-        SELECT role FROM group_members
-        WHERE group_id = ? AND user_id = ?
-    ");
-    $stmt->execute([$group_id, $user_id]);
-    $member = $stmt->fetch();
-
-    if (!$member) {
-        echo json_encode(["success" => false, "message" => "Not a member"]);
-        exit;
-    }
-
-    if ($member['role'] === 'owner') {
         echo json_encode([
             "success" => false,
-            "message" => "Owner cannot leave group"
+            "message" => "Database error"
         ]);
-        exit;
     }
-
-    $stmt = $pdo->prepare("
-        DELETE FROM group_members
-        WHERE group_id = ? AND user_id = ?
-    ");
-    $stmt->execute([$group_id, $user_id]);
-
-    echo json_encode(["success" => true]);
-    exit;
 }
+
+// // ─── DELETE: Leave group ─────────────────────────────
+// if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+//     $data = json_decode(file_get_contents("php://input"), true);
+//     $group_id = $data['group_id'] ?? null;
+
+//     $debug = [
+//         "user_id" => $user_id,
+//         "group_id" => $group_id,
+//     ];
+
+//     if (!$group_id) {
+//         echo json_encode([
+//             "success" => false,
+//             "message" => "group_id required",
+//             "debug" => $debug
+//         ]);
+//         exit;
+//     }
+
+//     // Get membership info
+//     $stmt = $pdo->prepare("
+//         SELECT role 
+//         FROM group_members
+//         WHERE group_id = ? AND user_id = ?
+//     ");
+//     $stmt->execute([$group_id, $user_id]);
+//     $member = $stmt->fetch();
+
+//     $debug["membership_row"] = $member;
+
+//     if (!$member) {
+//         echo json_encode([
+//             "success" => false,
+//             "message" => "Not a member",
+//             "debug" => $debug
+//         ]);
+//         exit;
+//     }
+
+//     // OWNER BLOCK CHECK
+//     if ($member['role'] === 'owner') {
+
+//         $debug["blocked_reason"] = "user_is_owner";
+
+//         echo json_encode([
+//             "success" => false,
+//             "message" => "Owner cannot leave group",
+//             "debug" => $debug
+//         ]);
+//         exit;
+//     }
+
+//     // Delete membership
+//     $stmt = $pdo->prepare("
+//         DELETE FROM group_members
+//         WHERE group_id = ? AND user_id = ?
+//     ");
+//     $stmt->execute([$group_id, $user_id]);
+
+//     $debug["deleted"] = $stmt->rowCount();
+
+//     echo json_encode([
+//         "success" => true,
+//         "message" => "Left group",
+//         "debug" => $debug
+//     ]);
+//     exit;
+// }

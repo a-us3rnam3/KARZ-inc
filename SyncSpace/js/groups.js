@@ -147,6 +147,7 @@ document.getElementById('create-group-form')
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
+                action: "create",
                 group_name: name,
                 description: desc,
                 usernames: usernames
@@ -168,19 +169,24 @@ async function leaveGroup() {
     if (!confirm('Are you sure you want to leave this group?')) return;
 
     const res = await fetch(API, {
-        method: 'DELETE',
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ group_id: currentGroupId })
+        body: JSON.stringify({
+            action: "leave",
+            group_id: currentGroupId
+        })
     });
 
     const data = await res.json();
+
+    console.log("LEAVE GROUP RESPONSE:", data);
 
     if (data.success) {
         alert('You left the group');
         closeGroupModal();
         loadGroups();
     } else {
-        alert(data.message);
+        alert(data.message || 'Failed to leave group');
     }
 }
 
