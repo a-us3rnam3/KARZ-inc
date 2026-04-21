@@ -1,4 +1,12 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Handles the registration form POST for SyncSpace. Validates all
+ *              fields (non-empty, valid email, password length and match, unique
+ *              username/email), hashes the password, inserts the new user, and
+ *              redirects to login on success or back to register with an error code
+ *              on failure.
+ */
 session_start();
 require 'db.php';
 

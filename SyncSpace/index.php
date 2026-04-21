@@ -1,4 +1,11 @@
 <?php
+/**
+ * Date: 2026-03-31
+ * Description: Main dashboard page for SyncSpace. Requires an authenticated
+ *              session, then renders the calendar, sidebar, upcoming events panel,
+ *              and the Add Event, Event Detail, and Share Event modal dialogs.
+ *              Calendar data is loaded dynamically by js/events.js.
+ */
 require_once 'api/auth.php';
 require_login();
 
@@ -213,6 +220,21 @@ $initials = strtoupper(substr($username, 0, 1));
                         <option value="personal">Personal</option>
                         <option value="group">Group</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="event-repeat">Repeat</label>
+                    <select id="event-repeat" name="event-repeat">
+                        <option value="none">Does not repeat</option>
+                        <option value="daily">Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                    </select>
+                </div>
+
+                <div class="form-group" id="repeat-end-field" style="display:none">
+                    <label for="event-repeat-end">Repeat Until</label>
+                    <input type="date" id="event-repeat-end" name="event-repeat-end">
                 </div>
 
                 <div class="form-row">

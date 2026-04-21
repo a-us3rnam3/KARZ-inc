@@ -1,13 +1,12 @@
 <?php
-/*TODO
-write up the visual aspect
-implement GET and DELETE*/
-// SyncSpace — Events API
-// Marcus Rotaru
-//
-// GET    /api/event_groups.php?group_id=X   — get events for a group  TO IMPLEMENT
-// POST   /api/event_groups.php              — share event with group
-// DELETE /api/event_groups.php              — unshare event from group TO IMPLEMENT
+/**
+ * Date: 2026-04-04
+ * Description: API endpoint for sharing SyncSpace events with groups. Manages
+ *              records in the event_groups junction table.
+ *              POST   /api/event_groups.php  — share an event with a group
+ *              GET    /api/event_groups.php  — get events for a group (TODO)
+ *              DELETE /api/event_groups.php  — unshare event from group (TODO)
+ */
 
 session_start();
 require_once 'db.php';

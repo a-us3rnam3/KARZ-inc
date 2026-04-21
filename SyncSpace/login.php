@@ -1,4 +1,10 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Login page for SyncSpace. Redirects already-authenticated users
+ *              to the dashboard. Displays the login form and shows error or
+ *              success messages passed via query string parameters.
+ */
 session_start();
 
 if (isset($_SESSION['user_id'])) {

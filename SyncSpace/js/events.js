@@ -1,7 +1,10 @@
-// SyncSpace — Event Adding Module
-// Erfan Zamani
-// Handles event creation, deletion, and calendar rendering.
-// All data is persisted via PHP API → MySQL (zamane1_db.events table).
+/**
+ * Date: 2026-04-01
+ * Description: Event management module for SyncSpace. Handles event creation,
+ *              deletion, and calendar rendering across monthly, weekly, and daily
+ *              views. Manages all modal dialogs and sidebar updates. All data is
+ *              persisted via the PHP API to MySQL (zamane1_db.events table).
+ */
 
 'use strict';
 
@@ -10,6 +13,11 @@ const API = 'api/events.php';
 
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
+/**
+ * Fetches all events visible to the current user from the server.
+ *
+ * @returns {Promise<Array>} array of event objects, or an empty array on error
+ */
 async function fetchEvents() {
     try {
         const res = await fetch(API);
@@ -20,6 +28,12 @@ async function fetchEvents() {
     }
 }
 
+/**
+ * Sends a new event to the server to be saved in the database.
+ *
+ * @param {Object} payload - event data matching the events table columns
+ * @returns {Promise<Object>} the saved event object returned by the server
+ */
 async function createEvent(payload) {
     const res = await fetch(API, {
         method: 'POST',
@@ -31,10 +45,22 @@ async function createEvent(payload) {
     return data;
 }
 
+/**
+ * Deletes the event with the given ID from the database.
+ *
+ * @param {number} event_id - the ID of the event to delete
+ * @returns {Promise<void>}
+ */
 async function removeEvent(event_id) {
     await fetch(`${API}?id=${event_id}`, { method: 'DELETE' });
 }
 
+/**
+ * Fetches the current user's groups from the API and populates the Share
+ * Event group dropdown. Shows a disabled placeholder if no groups exist.
+ *
+ * @returns {Promise<void>}
+ */
 async function loadGroupsIntoDropdown() {
     const select = document.getElementById('share-group');
 
@@ -79,32 +105,59 @@ let state = {
     month: new Date().getMonth(),
     view: 'monthly',
     selectedDate: todayStr(),
-    events: []   // in-memory cache of the DB rows
+    events: []   // in-memory cache of the DB rows (including expanded recurring instances)
 };
 
 // ─── Add-Event Modal ──────────────────────────────────────────────────────────
 
+/**
+ * Opens the Add Event modal and pre-fills the date field.
+ *
+ * @param {string} dateStr - ISO date string (YYYY-MM-DD) for the event date;
+ *                           defaults to today if omitted
+ * @returns {void}
+ */
 function openModal(dateStr) {
     const modal = document.getElementById('event-modal');
     document.getElementById('event-form').reset();
     document.getElementById('event-date').value = dateStr || todayStr();
     document.getElementById('event-start').value = '09:00';
     document.getElementById('event-end').value = '10:00';
+    document.getElementById('repeat-end-field').style.display = 'none';
     setAllDayFields(false);
     modal.classList.add('open');
     document.getElementById('event-title').focus();
 }
 
+/**
+ * Closes the Add Event modal.
+ *
+ * @returns {void}
+ */
 function closeModal() {
     document.getElementById('event-modal').classList.remove('open');
 }
 
+/**
+ * Shows or hides the time input fields based on the All Day checkbox.
+ *
+ * @param {boolean} isAllDay - true to hide time fields, false to show them
+ * @returns {void}
+ */
 function setAllDayFields(isAllDay) {
     document.getElementById('time-fields').style.display = isAllDay ? 'none' : 'grid';
 }
 
 // ─── Detail Modal ─────────────────────────────────────────────────────────────
 
+/**
+ * Opens the Event Detail modal and populates it with the given event's data.
+ * Anonymous events owned by another user display redacted information.
+ * The Delete button is only shown to the event's creator.
+ *
+ * @param {Object} ev - the event object from state.events
+ * @returns {void}
+ */
 function openDetailModal(ev) {
     const modal = document.getElementById('detail-modal');
     const start = new Date(ev.start_time);
@@ -125,7 +178,12 @@ function openDetailModal(ev) {
     badge.textContent = capitalize(ev.priority);
     badge.className = `detail-priority-badge priority-${ev.priority}`;
 
-    document.getElementById('detail-delete-btn').onclick = async () => {
+    // Only the creator can delete; hide the button for shared/group events
+    const deleteBtn = document.getElementById('detail-delete-btn');
+    deleteBtn.style.display = ev.created_by === CURRENT_USER_ID ? '' : 'none';
+
+    deleteBtn.onclick = async () => {
+        if (!confirm('Delete this event' + (ev.repeat_type && ev.repeat_type !== 'none' ? ' and all its repeats' : '') + '?')) return;
         await removeEvent(ev.event_id);
         state.events = state.events.filter(e => e.event_id !== ev.event_id);
         closeDetailModal();
@@ -136,13 +194,23 @@ function openDetailModal(ev) {
     modal.classList.add('open');
 }
 
+/**
+ * Closes the Event Detail modal.
+ *
+ * @returns {void}
+ */
 function closeDetailModal() {
     document.getElementById('detail-modal').classList.remove('open');
 }
 
-// Marcus Rotaru
 // ─── Share Modal ────────────────────────────────────────────────────────────
 
+/**
+ * Opens the Share Event modal, loads available groups from the API, and
+ * populates the event dropdown with events owned by the current user.
+ *
+ * @returns {Promise<void>}
+ */
 async function openShareModal() {
     const modal = document.getElementById('share-modal');
     const eventSelect = document.getElementById('share-event');
@@ -153,7 +221,13 @@ async function openShareModal() {
     // Existing event logic
     eventSelect.innerHTML = '';
 
-    const userEvents = state.events.filter(ev => ev.owner_user_id === CURRENT_USER_ID);
+    // Only use base events (deduplicate recurring instances by event_id)
+    const seen = new Set();
+    const userEvents = state.events.filter(ev => {
+        if (ev.owner_user_id !== CURRENT_USER_ID || seen.has(ev.event_id)) return false;
+        seen.add(ev.event_id);
+        return true;
+    });
 
     if (!userEvents.length) {
         eventSelect.innerHTML = '<option disabled selected>No events available</option>';
@@ -172,12 +246,22 @@ async function openShareModal() {
     modal.classList.add('open');
 }
 
+/**
+ * Closes the Share Event modal.
+ *
+ * @returns {void}
+ */
 function closeShareModal() {
     document.getElementById('share-modal').classList.remove('open');
 }
-//Mazen Anklis
-// ─── Free Time Modal ─────────────────────────────────────────────
+// ─── Free Time Modal ─────────────────────────────────────────────────────────
 
+/**
+ * Opens the Find Free Time modal, loads available groups, and resets the
+ * date field to today.
+ *
+ * @returns {Promise<void>}
+ */
 async function openFreeTimeModal() {
     const modal = document.getElementById('free-time-modal');
     const select = document.getElementById('free-group');
@@ -205,12 +289,56 @@ async function openFreeTimeModal() {
     modal.classList.add('open');
 }
 
+/**
+ * Closes the Find Free Time modal.
+ *
+ * @returns {void}
+ */
 function closeFreeTimeModal() {
     document.getElementById('free-time-modal').classList.remove('open');
 }
 
+/**
+ * Handles Find Free Time form submission. POSTs the selected group ID and
+ * date to the backend, then renders the returned HTML into the results box.
+ *
+ * @param {Event} e - the DOM submit event from the free-time form
+ * @returns {Promise<void>}
+ */
+async function handleFreeTimeSubmit(e) {
+    e.preventDefault();
+
+    const group_id = document.getElementById('free-group').value;
+    const date = document.getElementById('free-date').value;
+
+    const resBox = document.getElementById('free-time-results');
+    resBox.innerHTML = 'Loading...';
+
+    try {
+        const res = await fetch('api/find_free_time.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `group_id=${group_id}&date=${date}`
+        });
+
+        const html = await res.text();
+        resBox.innerHTML = html;
+
+    } catch (err) {
+        resBox.innerHTML = 'Error finding free time.';
+    }
+}
+
 // ─── Form Submission ──────────────────────────────────────────────────────────
 
+/**
+ * Handles Add Event form submission. Validates time order, builds the payload,
+ * POSTs it to the API, expands any new recurring instances, and refreshes the
+ * calendar on success.
+ *
+ * @param {Event} e - the DOM submit event from the event form
+ * @returns {Promise<void>}
+ */
 async function handleFormSubmit(e) {
     e.preventDefault();
     const form = e.target;
@@ -218,6 +346,8 @@ async function handleFormSubmit(e) {
     const startT = form['event-start'].value;
     const endT = form['event-end'].value;
     const date = form['event-date'].value;
+    const repeatType = form['event-repeat'].value;
+    const repeatEndDate = form['event-repeat-end'].value || null;
 
     if (!isAllDay && startT >= endT) {
         alert('End time must be after start time.');
@@ -236,12 +366,16 @@ async function handleFormSubmit(e) {
         location: form['event-location'].value.trim(),
         is_all_day: isAllDay,
         priority: form['event-priority'].value,
-        anonymous: form['event-anon'].checked
+        anonymous: form['event-anon'].checked,
+        repeat_type: repeatType,
+        repeat_end_date: repeatEndDate
     };
 
     try {
         const saved = await createEvent(payload);
-        state.events.push(saved);
+        // Expand the newly saved event (may produce recurring instances) and add to state
+        const instances = expandRecurring([saved]);
+        state.events.push(...instances);
         closeModal();
         renderCalendar();
         updateUpcomingEvents();
@@ -250,6 +384,13 @@ async function handleFormSubmit(e) {
     }
 }
 
+/**
+ * Handles Share Event form submission. Reads the selected event, group, and
+ * anonymous flag, then POSTs the share request to the backend.
+ *
+ * @param {Event} e - the DOM submit event from the share form
+ * @returns {Promise<void>}
+ */
 async function handleShareSubmit(e) {
     e.preventDefault();
 
@@ -262,30 +403,6 @@ async function handleShareSubmit(e) {
         group_id: groupId,
         anonymous: anonymous
     };
-    //Mazen Anklis
-    async function handleFreeTimeSubmit(e) {
-        e.preventDefault();
-
-        const group_id = document.getElementById('free-group').value;
-        const date = document.getElementById('free-date').value;
-
-        const resBox = document.getElementById('free-time-results');
-        resBox.innerHTML = 'Loading...';
-
-        try {
-            const res = await fetch('api/find_free_time.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `group_id=${group_id}&date=${date}`
-            });
-
-            const html = await res.text();
-            resBox.innerHTML = html;
-
-        } catch (err) {
-            resBox.innerHTML = 'Error finding free time.';
-        }
-    }
 
     // TODO: connect to backend endpoint
     await fetch('api/event_groups.php', {
@@ -298,8 +415,67 @@ async function handleShareSubmit(e) {
     alert('Event shared successfully.');
 }
 
+// ─── Recurring Event Expansion ────────────────────────────────────────────────
+
+/**
+ * Expands each recurring event into individual instances up to 3 months ahead
+ * (or the series end date, whichever comes first). Non-recurring events are
+ * passed through unchanged.
+ *
+ * @param {Array} baseEvents - array of raw event objects from the API
+ * @returns {Array} flat array containing the original events plus all instances
+ */
+function expandRecurring(baseEvents) {
+    const expanded = [];
+    const cutoff = new Date();
+    cutoff.setMonth(cutoff.getMonth() + 3);
+
+    for (const ev of baseEvents) {
+        expanded.push(ev);
+        if (!ev.repeat_type || ev.repeat_type === 'none') continue;
+
+        const baseStart = new Date(ev.start_time);
+        const duration = new Date(ev.end_time) - baseStart; // milliseconds
+        const seriesEnd = ev.repeat_end_date ? new Date(ev.repeat_end_date) : cutoff;
+        const limit = seriesEnd < cutoff ? seriesEnd : cutoff;
+
+        const cur = new Date(baseStart);
+        for (let i = 0; i < 500; i++) {
+            if (ev.repeat_type === 'daily')        cur.setDate(cur.getDate() + 1);
+            else if (ev.repeat_type === 'weekly')  cur.setDate(cur.getDate() + 7);
+            else if (ev.repeat_type === 'monthly') cur.setMonth(cur.getMonth() + 1);
+
+            if (cur > limit) break;
+
+            expanded.push({
+                ...ev,
+                start_time: toDbTimestamp(new Date(cur)),
+                end_time:   toDbTimestamp(new Date(cur.getTime() + duration)),
+            });
+        }
+    }
+    return expanded;
+}
+
+/**
+ * Formats a Date object as a MySQL-style timestamp string ("YYYY-MM-DD HH:MM:SS").
+ *
+ * @param {Date} date - the date to format
+ * @returns {string} timestamp string in "YYYY-MM-DD HH:MM:SS" format
+ */
+function toDbTimestamp(date) {
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
+           `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
 // ─── Calendar Rendering ───────────────────────────────────────────────────────
 
+/**
+ * Renders the calendar by delegating to the appropriate view function based
+ * on the current value of state.view ('monthly', 'weekly', or 'daily').
+ *
+ * @returns {void}
+ */
 function renderCalendar() {
     const grid = document.querySelector('.calendar-grid');
     grid.style.gridTemplateColumns = '';
@@ -312,6 +488,12 @@ function renderCalendar() {
 
 // --- Monthly -----------------------------------------------------------------
 
+/**
+ * Renders the monthly calendar grid. Builds day-name headers, empty offset
+ * cells, and one cell per day with event pills for each event on that date.
+ *
+ * @returns {void}
+ */
 function renderMonthly() {
     const { year, month, events } = state;
     const firstDay = new Date(year, month, 1).getDay();
@@ -363,6 +545,12 @@ function renderMonthly() {
 
 // --- Weekly ------------------------------------------------------------------
 
+/**
+ * Renders the weekly calendar view. Shows a 7-column time grid from 7 AM to
+ * 10 PM for the week containing the current month's reference date.
+ *
+ * @returns {void}
+ */
 function renderWeekly() {
     const { year, month, events } = state;
     const today = new Date();
@@ -434,6 +622,12 @@ function renderWeekly() {
 
 // --- Daily -------------------------------------------------------------------
 
+/**
+ * Renders the daily calendar view. Shows a 2-column time grid (Time | Day)
+ * for state.selectedDate, from 7 AM to 10 PM plus an All Day row if needed.
+ *
+ * @returns {void}
+ */
 function renderDaily() {
     const { events } = state;
     const target = new Date(state.selectedDate + 'T12:00:00');
@@ -504,11 +698,21 @@ function renderDaily() {
 
 // ─── Event Pill ───────────────────────────────────────────────────────────────
 
+/**
+ * Creates a colored event pill element for display inside a calendar cell.
+ * Anonymous events owned by another user display as "(Private)". Recurring
+ * events show a repeat indicator (↻) appended to the title.
+ *
+ * @param {Object}  ev    - the event object from state.events
+ * @param {boolean} small - if true, renders the pill at a smaller font size
+ * @returns {HTMLDivElement} the pill div element, ready to append to the DOM
+ */
 function makePill(ev, small = false) {
     const pill = document.createElement('div');
     pill.className = `event-pill ${ev.priority}`;
     if (small) pill.style.fontSize = '0.65rem';
-    pill.textContent = isHidden(ev) ? '(Private)' : ev.title;
+    const recurringMark = (ev.repeat_type && ev.repeat_type !== 'none') ? ' ↻' : '';
+    pill.textContent = isHidden(ev) ? '(Private)' : ev.title + recurringMark;
     pill.title = isHidden(ev) ? 'Anonymous — time blocked'
         : `${ev.title}${ev.location ? ' @ ' + ev.location : ''}`;
     pill.addEventListener('click', e => { e.stopPropagation(); openDetailModal(ev); });
@@ -517,6 +721,12 @@ function makePill(ev, small = false) {
 
 // ─── Upcoming Events Panel ────────────────────────────────────────────────────
 
+/**
+ * Rebuilds the Upcoming Events list in the sidebar with the next 5 events
+ * that have not yet ended, sorted by start time.
+ *
+ * @returns {void}
+ */
 function updateUpcomingEvents() {
     const now = new Date();
     const upcoming = state.events
@@ -550,6 +760,12 @@ function updateUpcomingEvents() {
 
 // ─── View Switching & Navigation ─────────────────────────────────────────────
 
+/**
+ * Attaches click handlers to the Monthly, Weekly, and Daily view buttons.
+ * Updates state.view and re-renders the calendar on each click.
+ *
+ * @returns {void}
+ */
 function initViewSwitcher() {
     const views = ['monthly', 'weekly', 'daily'];
     document.querySelectorAll('.view-btn').forEach((btn, i) => {
@@ -563,6 +779,12 @@ function initViewSwitcher() {
     });
 }
 
+/**
+ * Attaches click handlers to the previous and next navigation buttons.
+ * Advances or retreats by one day (daily view) or one month (other views).
+ *
+ * @returns {void}
+ */
 function initNavigation() {
     const [prevBtn, nextBtn] = document.querySelectorAll('.calendar-controls button');
 
@@ -593,29 +815,68 @@ function initNavigation() {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-// Anonymous events are only hidden from others — the owner always sees full details
+/**
+ * Determines whether an event's details should be hidden from the current user.
+ * Anonymous events are only hidden from others — the owner always sees full details.
+ *
+ * @param {Object} ev - the event object from state.events
+ * @returns {boolean} true if the event is anonymous and owned by another user
+ */
 function isHidden(ev) {
     return ev.anonymous && ev.owner_user_id !== CURRENT_USER_ID;
 }
 
+/**
+ * Checks whether an ISO datetime string falls on a specific calendar date.
+ *
+ * @param {string} isoStr - ISO datetime string (e.g. "2026-04-21 09:00:00")
+ * @param {number} year   - the full year to compare (e.g. 2026)
+ * @param {number} month  - the 0-based month index (0 = January)
+ * @param {number} date   - the day of the month (1–31)
+ * @returns {boolean} true if isoStr represents a date on the given year/month/date
+ */
 function sameDay(isoStr, year, month, date) {
     const d = new Date(isoStr);
     return d.getFullYear() === year && d.getMonth() === month && d.getDate() === date;
 }
 
+/**
+ * Checks whether two Date objects represent the same calendar day.
+ *
+ * @param {Date} a - first date
+ * @param {Date} b - second date
+ * @returns {boolean} true if a and b share the same year, month, and day
+ */
 function datesEqual(a, b) {
     return a.getFullYear() === b.getFullYear() &&
         a.getMonth() === b.getMonth() &&
         a.getDate() === b.getDate();
 }
 
+/**
+ * Zero-pads a number to at least 2 digits.
+ *
+ * @param {number} n - the number to pad
+ * @returns {string} the number as a string, left-padded with '0' if needed
+ */
 function pad(n) { return String(n).padStart(2, '0'); }
 
+/**
+ * Returns today's date formatted as a YYYY-MM-DD string.
+ *
+ * @returns {string} today's date in ISO date format (e.g. "2026-04-21")
+ */
 function todayStr() {
     const t = new Date();
     return `${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`;
 }
 
+/**
+ * Formats a Date object as a 12-hour time string (e.g. "9:30 AM").
+ *
+ * @param {Date} date - the date whose time will be formatted
+ * @returns {string} 12-hour time string with AM/PM suffix
+ */
 function fmt12(date) {
     let h = date.getHours();
     const m = pad(date.getMinutes());
@@ -624,19 +885,31 @@ function fmt12(date) {
     return `${h}:${m} ${ap}`;
 }
 
+/**
+ * Formats an hour integer as a 12-hour clock label (e.g. 13 → "1 PM").
+ *
+ * @param {number} h - hour in 24-hour format (0–23)
+ * @returns {string} 12-hour label with AM/PM suffix
+ */
 function fmtHour(h) {
     const ap = h >= 12 ? 'PM' : 'AM';
     return `${h % 12 || 12} ${ap}`;
 }
 
+/**
+ * Capitalizes the first character of a string.
+ *
+ * @param {string} s - the input string
+ * @returns {string} the string with its first character uppercased
+ */
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', async () => {
 
-    // Load events from database
-    state.events = await fetchEvents();
+    // Load events and expand any recurring series
+    state.events = expandRecurring(await fetchEvents());
 
     // Add-event form
     document.getElementById('event-form').addEventListener('submit', handleFormSubmit);
@@ -647,6 +920,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
     document.getElementById('event-allday').addEventListener('change', e =>
         setAllDayFields(e.target.checked));
+
+    // Show/hide the "Repeat Until" date field based on repeat type selection
+    document.getElementById('event-repeat').addEventListener('change', e => {
+        document.getElementById('repeat-end-field').style.display =
+            e.target.value === 'none' ? 'none' : '';
+    });
 
     // Detail modal
     document.querySelectorAll('.detail-dismiss').forEach(btn =>
@@ -703,6 +982,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     renderCalendar();
     updateUpcomingEvents();
-
 
 });

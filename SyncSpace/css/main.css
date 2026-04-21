@@ -1,3 +1,19 @@
+/*
+ * Date: 2026-03-31
+ * Description: Main stylesheet for SyncSpace. Defines the full visual design
+ *              including layout (header, sidebar, calendar grid, modals),
+ *              component styles (buttons, forms, event pills, priority legend),
+ *              and responsive breakpoints for screens down to 600px wide.
+ *
+ * Colour palette:
+ *   Soft gray:   #a3a3a3
+ *   Off white:   #ecece3
+ *   Pale cream:  #dddcc8
+ *   Light gray:  #c8c7bd
+ *   Light green: #bfd8b8
+ *   Dark text:   #4f544d
+ */
+
 /* Reset / Base */
 * {
     margin: 0;

@@ -1,10 +1,16 @@
 <?php
-// SyncSpace — Events API
-// Erfan Zamani
-//
-// GET    /api/events.php          — fetch all events
-// POST   /api/events.php          — insert a new event
-// DELETE /api/events.php?id=X     — delete an event by event_id
+/**
+ * Date: 2026-04-01
+ * Description: RESTful API endpoint for SyncSpace event CRUD operations.
+ *              GET    /api/events.php        — fetch all events visible to the
+ *                                             current user (own + group-shared),
+ *                                             including recurring event metadata
+ *              POST   /api/events.php        — insert a new event; if repeat_type
+ *                                             is set, also creates a recurring_event
+ *                                             record for client-side expansion
+ *              DELETE /api/events.php?id=X  — delete an event by event_id
+ *                                             (only the creator may delete)
+ */
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -30,17 +36,19 @@ $currentUserId = (int)$_SESSION['user_id'];
 
 // ─── GET: return events visible to the current user ──────────────────────────
 if ($method === 'GET') {
-    // Own events + events shared to groups the user belongs to
+    // Own events + events shared to groups the user belongs to, with repeat info
     $stmt = $pdo->prepare("
         SELECT DISTINCT e.event_id, e.title, e.description,
                e.start_time, e.end_time,
                e.created_by, e.owner_user_id, e.owner_group_id,
                e.location, e.is_all_day, e.priority, e.anonymous,
-               e.created_at, e.updated_at
+               e.created_at, e.updated_at,
+               r.repeat_type, r.end_date AS repeat_end_date
         FROM events e
         LEFT JOIN event_groups eg ON eg.event_id = e.event_id
         LEFT JOIN group_members gm ON gm.group_id = eg.group_id
                                    AND gm.user_id = :uid2
+        LEFT JOIN recurring_event r ON r.event_id = e.event_id
         WHERE e.owner_user_id = :uid1
            OR gm.user_id IS NOT NULL
         ORDER BY e.start_time ASC
@@ -50,12 +58,14 @@ if ($method === 'GET') {
 
     // Cast numeric flags to proper types for JS
     foreach ($events as &$e) {
-        $e['event_id']       = (int)  $e['event_id'];
-        $e['created_by']     = (int)  $e['created_by'];
-        $e['owner_user_id']  = $e['owner_user_id']  !== null ? (int) $e['owner_user_id']  : null;
-        $e['owner_group_id'] = $e['owner_group_id'] !== null ? (int) $e['owner_group_id'] : null;
-        $e['is_all_day']     = (bool) $e['is_all_day'];
-        $e['anonymous']      = (bool) $e['anonymous'];
+        $e['event_id']        = (int)  $e['event_id'];
+        $e['created_by']      = (int)  $e['created_by'];
+        $e['owner_user_id']   = $e['owner_user_id']  !== null ? (int) $e['owner_user_id']  : null;
+        $e['owner_group_id']  = $e['owner_group_id'] !== null ? (int) $e['owner_group_id'] : null;
+        $e['is_all_day']      = (bool) $e['is_all_day'];
+        $e['anonymous']       = (bool) $e['anonymous'];
+        $e['repeat_type']     = $e['repeat_type']     ?? null;
+        $e['repeat_end_date'] = $e['repeat_end_date'] ?? null;
     }
 
     echo json_encode($events);
@@ -100,12 +110,30 @@ if ($method === 'POST') {
 
         $newId = (int) $pdo->lastInsertId();
 
+        // Store recurring pattern if requested
+        $repeatType    = $data['repeat_type']     ?? 'none';
+        $repeatEndDate = !empty($data['repeat_end_date']) ? $data['repeat_end_date'] : null;
+
+        if ($repeatType && $repeatType !== 'none') {
+            $rStmt = $pdo->prepare("
+                INSERT INTO recurring_event (event_id, repeat_type, end_date)
+                VALUES (:event_id, :repeat_type, :end_date)
+            ");
+            $rStmt->execute([
+                ':event_id'    => $newId,
+                ':repeat_type' => $repeatType,
+                ':end_date'    => $repeatEndDate,
+            ]);
+        }
+
         $row = $pdo->query("SELECT * FROM events WHERE event_id = $newId")->fetch(PDO::FETCH_ASSOC);
-        $row['event_id']       = (int)  $row['event_id'];
-        $row['is_all_day']     = (bool) $row['is_all_day'];
-        $row['anonymous']      = (bool) $row['anonymous'];
-        $row['owner_user_id']  = $row['owner_user_id']  !== null ? (int) $row['owner_user_id']  : null;
-        $row['owner_group_id'] = $row['owner_group_id'] !== null ? (int) $row['owner_group_id'] : null;
+        $row['event_id']        = (int)  $row['event_id'];
+        $row['is_all_day']      = (bool) $row['is_all_day'];
+        $row['anonymous']       = (bool) $row['anonymous'];
+        $row['owner_user_id']   = $row['owner_user_id']  !== null ? (int) $row['owner_user_id']  : null;
+        $row['owner_group_id']  = $row['owner_group_id'] !== null ? (int) $row['owner_group_id'] : null;
+        $row['repeat_type']     = $repeatType !== 'none' ? $repeatType : null;
+        $row['repeat_end_date'] = $repeatEndDate;
 
         http_response_code(201);
         echo json_encode($row);
@@ -126,6 +154,7 @@ if ($method === 'DELETE') {
         exit;
     }
 
+    // Only the creator may delete; recurring_event row is removed by CASCADE
     $stmt = $pdo->prepare("DELETE FROM events WHERE event_id = :id AND created_by = :uid");
     $stmt->execute([':id' => $id, ':uid' => $currentUserId]);
 

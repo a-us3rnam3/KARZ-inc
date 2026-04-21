@@ -1,4 +1,10 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Registration page for SyncSpace. Redirects already-authenticated
+ *              users to the dashboard. Displays the account creation form and
+ *              shows validation error messages passed via query string parameters.
+ */
 session_start();
 
 if (isset($_SESSION['user_id'])) {

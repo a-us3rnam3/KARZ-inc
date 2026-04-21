@@ -1,6 +1,12 @@
 <?php
-// SyncSpace — Database Setup
-// Run once to create all tables: http://localhost/SyncSpace/api/setup.php
+/**
+ * Date: 2026-04-01
+ * Description: One-time database setup script for SyncSpace. Creates all required
+ *              tables (users, user_groups, group_members, events, recurring_event,
+ *              event_exceptions, event_groups), applies schema migrations, and
+ *              seeds a placeholder user. Run once at:
+ *              http://localhost/SyncSpace/api/setup.php
+ */
 
 require 'db.php';
 

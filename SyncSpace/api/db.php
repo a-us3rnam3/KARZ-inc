@@ -1,4 +1,10 @@
 <?php
+/**
+ * Date: 2026-04-01
+ * Description: Database connection configuration for SyncSpace. Establishes a
+ *              PDO connection to the MySQL database and makes $pdo available
+ *              to any file that requires this script.
+ */
 $db_host = "localhost";
 $db_name = "rotarum_db";
 $db_user = "rotarum_local";
