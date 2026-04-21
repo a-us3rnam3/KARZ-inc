@@ -1,5 +1,6 @@
 
 /**
+ * groups.js
  * Date: 2026-04-05
  * Description: Front-end module for managing user groups in SyncSpace.
  *              Fetches group data from the server and dynamically renders
@@ -8,15 +9,13 @@
  *              to the backend API and updates the interface accordingly.
  */
 
-//groups.js
-
 const EVENT_API = 'api/event_groups.php';
 const USER_EVENTS_API = 'api/events.php';
 let currentGroupId = null;
 
 // ─── Fetch groups ─────────────────────────────
 async function loadGroups() {
-    const res = await fetch(API);
+    const res = await fetch(USER_EVENTS_API);
     const groups = await res.json();
 
     const list = document.getElementById('group-list');
@@ -50,14 +49,22 @@ async function openGroupModal(groupId) {
     const modal = document.getElementById('group-modal');
     modal.classList.add('open');
 
-    // get group info
     const res = await fetch(API);
     const groups = await res.json();
+
     const group = groups.find(g => g.group_id == groupId);
 
+    if (!group) {
+        alert('Group not found');
+        closeGroupModal();
+        return;
+    }
+
     document.getElementById('group-title').textContent = group.group_name;
-    document.getElementById('group-desc').textContent = group.description || 'No description';
-    document.getElementById('group-members').textContent = group.members.join(', ');
+    document.getElementById('group-desc-text').textContent =
+        group.description || 'No description';
+    document.getElementById('group-members').textContent =
+        group.members.join(', ');
 
     loadGroupEvents(groupId);
     loadUserEvents(groupId);
@@ -135,7 +142,7 @@ document.getElementById('create-group-form')
             .map(u => u.trim())
             .filter(u => u.length);
 
-        const res = await fetch(API, {
+        const res = await fetch(USER_EVENTS_API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -159,7 +166,7 @@ document.getElementById('create-group-form')
 async function leaveGroup() {
     if (!confirm('Are you sure you want to leave this group?')) return;
 
-    const res = await fetch(API, {
+    const res = await fetch(USER_EVENTS_API, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ group_id: currentGroupId })

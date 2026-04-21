@@ -1,5 +1,3 @@
-//groups.php
-
 <?php
 /**
  * Date: 2026-04-05
@@ -135,7 +133,7 @@ function scrollToCreate() {
         <div class="detail-body">
             <div class="detail-row">
                 <div class="detail-label">Description</div>
-                <div id="group-desc"></div>
+                <div id="group-desc-text"></div>
             </div>
 
             <div class="detail-row">
