@@ -73,6 +73,33 @@ if ($method === 'GET') {
     exit;
 }
 
+// ─── DELETE: remove an event by ID ───────────────────────────────────────────
+if ($method === 'DELETE' || ($method === 'POST' && ($_GET['action'] ?? '') === 'delete')) {
+    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+    if (!$id) {
+        http_response_code(400);
+        echo json_encode(['error' => 'id is required']);
+        exit;
+    }
+
+    // Session check above already ensures the user is authenticated.
+    // Client-side hides the delete button for events the user did not create,
+    // so no additional ownership clause is needed here.
+    // recurring_event row is removed automatically by ON DELETE CASCADE.
+    $stmt = $pdo->prepare("DELETE FROM events WHERE event_id = :id");
+    $stmt->execute([':id' => $id]);
+
+    if ($stmt->rowCount() === 0) {
+        http_response_code(404);
+        echo json_encode(['error' => 'Event not found']);
+        exit;
+    }
+
+    echo json_encode(['deleted' => $id]);
+    exit;
+}
+
 // ─── POST: insert a new event ─────────────────────────────────────────────────
 if ($method === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -142,33 +169,6 @@ if ($method === 'POST') {
         http_response_code(500);
         echo json_encode(['error' => $e->getMessage()]);
     }
-    exit;
-}
-
-// ─── DELETE: remove an event by ID ───────────────────────────────────────────
-if ($method === 'DELETE' || ($method === 'POST' && ($_GET['action'] ?? '') === 'delete')) {
-    $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
-
-    if (!$id) {
-        http_response_code(400);
-        echo json_encode(['error' => 'id is required']);
-        exit;
-    }
-
-    // Session check above already ensures the user is authenticated.
-    // Client-side hides the delete button for events the user did not create,
-    // so no additional ownership clause is needed here.
-    // recurring_event row is removed automatically by ON DELETE CASCADE.
-    $stmt = $pdo->prepare("DELETE FROM events WHERE event_id = :id");
-    $stmt->execute([':id' => $id]);
-
-    if ($stmt->rowCount() === 0) {
-        http_response_code(404);
-        echo json_encode(['error' => 'Event not found']);
-        exit;
-    }
-
-    echo json_encode(['deleted' => $id]);
     exit;
 }
 
