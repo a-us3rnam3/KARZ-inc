@@ -1,5 +1,6 @@
 <?php
 /**
+ * Name: Erfan Zamani
  * Date: 2026-04-01
  * Description: RESTful API endpoint for SyncSpace event CRUD operations.
  *              GET    /api/events.php        — fetch all events visible to the
@@ -154,9 +155,19 @@ if ($method === 'DELETE') {
         exit;
     }
 
-    // Only the creator may delete; recurring_event row is removed by CASCADE
-    $stmt = $pdo->prepare("DELETE FROM events WHERE event_id = :id AND created_by = :uid");
+    // Only the owner may delete; recurring_event row is removed by ON DELETE CASCADE
+    $stmt = $pdo->prepare("
+        DELETE FROM events
+        WHERE event_id = :id
+          AND (created_by = :uid OR owner_user_id = :uid)
+    ");
     $stmt->execute([':id' => $id, ':uid' => $currentUserId]);
+
+    if ($stmt->rowCount() === 0) {
+        http_response_code(403);
+        echo json_encode(['error' => 'Event not found or you do not have permission to delete it']);
+        exit;
+    }
 
     echo json_encode(['deleted' => $id]);
     exit;

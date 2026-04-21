@@ -11,6 +11,7 @@
 const API = 'api/events.php';
 // CURRENT_USER_ID is provided by index.php
 
+// Erfan Zamani
 // ─── API Calls ────────────────────────────────────────────────────────────────
 
 /**
@@ -52,7 +53,11 @@ async function createEvent(payload) {
  * @returns {Promise<void>}
  */
 async function removeEvent(event_id) {
-    await fetch(`${API}?id=${event_id}`, { method: 'DELETE' });
+    const res = await fetch(`${API}?id=${event_id}`, { method: 'DELETE' });
+    if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'Failed to delete event');
+    }
 }
 
 /**
@@ -184,11 +189,15 @@ function openDetailModal(ev) {
 
     deleteBtn.onclick = async () => {
         if (!confirm('Delete this event' + (ev.repeat_type && ev.repeat_type !== 'none' ? ' and all its repeats' : '') + '?')) return;
-        await removeEvent(ev.event_id);
-        state.events = state.events.filter(e => e.event_id !== ev.event_id);
-        closeDetailModal();
-        renderCalendar();
-        updateUpcomingEvents();
+        try {
+            await removeEvent(ev.event_id);
+            state.events = state.events.filter(e => e.event_id !== ev.event_id);
+            closeDetailModal();
+            renderCalendar();
+            updateUpcomingEvents();
+        } catch (err) {
+            alert('Could not delete event: ' + err.message);
+        }
     };
 
     modal.classList.add('open');
@@ -606,9 +615,15 @@ function renderWeekly() {
             cell.className = 'time-cell' + (datesEqual(d, today) ? ' today-col' : '');
 
             events
-                .filter(ev => !ev.is_all_day &&
-                    datesEqual(new Date(ev.start_time), d) &&
-                    new Date(ev.start_time).getHours() === hour)
+                .filter(ev => {
+                    if (ev.is_all_day) return false;
+                    const s = new Date(ev.start_time);
+                    const e = new Date(ev.end_time);
+                    // Show in every hour slot the event spans, not just the start hour
+                    return datesEqual(s, d) &&
+                        s.getHours() <= hour &&
+                        (e.getHours() > hour || (e.getHours() === hour && e.getMinutes() > 0));
+                })
                 .forEach(ev => cell.appendChild(makePill(ev, true)));
 
             if (hour === 7) {
@@ -687,9 +702,15 @@ function renderDaily() {
         cell.className = 'time-cell' + (isCurrent ? ' current-hour' : '');
 
         events
-            .filter(ev => !ev.is_all_day &&
-                sameDay(ev.start_time, y, m, d) &&
-                new Date(ev.start_time).getHours() === hour)
+            .filter(ev => {
+                if (ev.is_all_day) return false;
+                const s = new Date(ev.start_time);
+                const e = new Date(ev.end_time);
+                // Show in every hour slot the event spans, not just the start hour
+                return sameDay(ev.start_time, y, m, d) &&
+                    s.getHours() <= hour &&
+                    (e.getHours() > hour || (e.getHours() === hour && e.getMinutes() > 0));
+            })
             .forEach(ev => {
                 const pill = makePill(ev);
                 const s = new Date(ev.start_time);
