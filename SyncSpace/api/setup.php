@@ -1,5 +1,6 @@
 <?php
 /**
+ * Name: Erfan Zamani
  * Date: 2026-04-01
  * Description: One-time database setup script for SyncSpace. Creates all required
  *              tables (users, user_groups, group_members, events, recurring_event,

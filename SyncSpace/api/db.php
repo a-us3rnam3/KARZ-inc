@@ -1,5 +1,6 @@
 <?php
 /**
+ * Name: Erfan Zamani
  * Date: 2026-04-01
  * Description: Database connection configuration for SyncSpace. Establishes a
  *              PDO connection to the MySQL database and makes $pdo available

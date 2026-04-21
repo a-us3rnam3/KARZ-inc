@@ -1,4 +1,5 @@
 /**
+ * Name: Erfan Zamani
  * Date: 2026-04-01
  * Description: Event management module for SyncSpace. Handles event creation,
  *              deletion, and calendar rendering across monthly, weekly, and daily
@@ -53,7 +54,7 @@ async function createEvent(payload) {
  * @returns {Promise<void>}
  */
 async function removeEvent(event_id) {
-    const res = await fetch(`${API}?id=${event_id}`, { method: 'DELETE' });
+    const res = await fetch(`${API}?action=delete&id=${event_id}`, { method: 'POST' });
     if (!res.ok) {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || 'Failed to delete event');

@@ -146,7 +146,7 @@ if ($method === 'POST') {
 }
 
 // ─── DELETE: remove an event by ID ───────────────────────────────────────────
-if ($method === 'DELETE') {
+if ($method === 'DELETE' || ($method === 'POST' && ($_GET['action'] ?? '') === 'delete')) {
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
     if (!$id) {
