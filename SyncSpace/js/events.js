@@ -203,6 +203,7 @@ function closeDetailModal() {
     document.getElementById('detail-modal').classList.remove('open');
 }
 
+// Marcus Rotaru
 // ─── Share Modal ────────────────────────────────────────────────────────────
 
 /**
@@ -254,6 +255,7 @@ async function openShareModal() {
 function closeShareModal() {
     document.getElementById('share-modal').classList.remove('open');
 }
+// Mazen Anklis
 // ─── Free Time Modal ─────────────────────────────────────────────────────────
 
 /**

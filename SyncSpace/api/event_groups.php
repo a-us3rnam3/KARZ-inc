@@ -1,5 +1,6 @@
 <?php
 /**
+ * Name: Marcus Rotaru
  * Date: 2026-04-04
  * Description: API endpoint for sharing SyncSpace events with groups. Manages
  *              records in the event_groups junction table.
