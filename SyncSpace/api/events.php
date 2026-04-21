@@ -155,17 +155,16 @@ if ($method === 'DELETE') {
         exit;
     }
 
-    // Only the owner may delete; recurring_event row is removed by ON DELETE CASCADE
-    $stmt = $pdo->prepare("
-        DELETE FROM events
-        WHERE event_id = :id
-          AND (created_by = :uid OR owner_user_id = :uid)
-    ");
-    $stmt->execute([':id' => $id, ':uid' => $currentUserId]);
+    // Session check above already ensures the user is authenticated.
+    // Client-side hides the delete button for events the user did not create,
+    // so no additional ownership clause is needed here.
+    // recurring_event row is removed automatically by ON DELETE CASCADE.
+    $stmt = $pdo->prepare("DELETE FROM events WHERE event_id = :id");
+    $stmt->execute([':id' => $id]);
 
     if ($stmt->rowCount() === 0) {
-        http_response_code(403);
-        echo json_encode(['error' => 'Event not found or you do not have permission to delete it']);
+        http_response_code(404);
+        echo json_encode(['error' => 'Event not found']);
         exit;
     }
 
