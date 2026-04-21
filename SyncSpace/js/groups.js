@@ -11,11 +11,12 @@
 
 const EVENT_API = 'api/event_groups.php';
 const USER_EVENTS_API = 'api/events.php';
+const API = 'api/groups.php'
 let currentGroupId = null;
 
 // ─── Fetch groups ─────────────────────────────
 async function loadGroups() {
-    const res = await fetch(USER_EVENTS_API);
+    const res = await fetch(API);
     const groups = await res.json();
 
     const list = document.getElementById('group-list');
@@ -142,7 +143,7 @@ document.getElementById('create-group-form')
             .map(u => u.trim())
             .filter(u => u.length);
 
-        const res = await fetch(USER_EVENTS_API, {
+        const res = await fetch(API, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -166,7 +167,7 @@ document.getElementById('create-group-form')
 async function leaveGroup() {
     if (!confirm('Are you sure you want to leave this group?')) return;
 
-    const res = await fetch(USER_EVENTS_API, {
+    const res = await fetch(API, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ group_id: currentGroupId })
