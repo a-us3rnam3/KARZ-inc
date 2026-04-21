@@ -1,4 +1,11 @@
 <?php
+/**
+ * Author: Taewoo Kim
+ * Date: 2026-04-21
+ * Description: Handles password update requests from authenticated users.
+ *              Verifies the current password, validates the new password,
+ *              and updates the stored password hash in the database.
+ */
 require_once 'auth.php';
 require_login();
 require_once 'db.php';

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Main groups page for SyncSpace. Requires an authenticated
+ *              session, displays the logged-in user's profile information,
+ *              provides a form for creating new groups, and shows the list
+ *              of groups the user belongs to. Group data and creation logic
+ *              are handled dynamically through js/groups.js and api/groups.php.
+ */
 require_once 'api/auth.php';
 require_login();
 

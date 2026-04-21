@@ -1,4 +1,12 @@
 <?php
+/**
+ * Date: 2026-04-21
+ * Author: Taewoo Kim
+ * Description: Handles account deletion requests. Verifies the user's
+ *              password, removes all associated data (events, memberships,
+ *              and groups where applicable), and deletes the user account.
+ *              Ends the session upon successful deletion.
+ */
 require_once 'auth.php';
 require_login();
 require_once 'db.php';

@@ -1,4 +1,12 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Calculates common free time for all members of a selected group
+ *              on a specific date. Retrieves all events for group members within
+ *              the given day, constructs busy time intervals, merges overlapping
+ *              intervals, and outputs available time slots where no member is busy.
+ *              Supports all-day events and standard timed events.
+ */
 require_once 'db.php';
 
 $group_id = $_POST['group_id'] ?? 0;

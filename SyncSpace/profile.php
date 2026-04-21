@@ -1,4 +1,12 @@
 <?php
+/**
+ * Author: Taewoo Kim
+ * Date: 2026-04-21
+ * Description: Profile and account management page for SyncSpace. Displays
+ *              user information (username and email) and allows users to
+ *              update their password or delete their account. All actions
+ *              require authentication.
+ */
 require_once 'api/auth.php';
 require_login();
 require_once 'api/db.php';

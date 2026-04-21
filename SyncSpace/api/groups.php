@@ -1,4 +1,12 @@
 <?php
+/**
+ * Date: 2026-04-05
+ * Description: Handles group management for authenticated SyncSpace users.
+ *              Supports fetching all groups that the current user belongs to
+ *              and creating new groups with selected members. Group data is
+ *              returned in structured JSON format, including group details
+ *              and member usernames.
+ */
 session_start();
 require_once 'db.php';
 

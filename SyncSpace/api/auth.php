@@ -1,6 +1,7 @@
 <?php
 /**
  * Date: 2026-04-05
+ * Author: Taewoo Kim
  * Description: Authentication utility functions for SyncSpace. Provides session
  *              checks and login guards used at the top of every protected page.
  */

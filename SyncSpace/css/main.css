@@ -430,9 +430,20 @@ body {
     background-color: #bfd8b8;
 }
 
-/* Show dropdown on hover */
-.profile-menu:hover .profile-dropdown {
+/* Show dropdown on click */
+.profile-menu.open .profile-dropdown {
     display: flex;
+}
+
+.profile-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.profile-btn:focus {
+    outline: none;
 }
 
 .priority-legend {

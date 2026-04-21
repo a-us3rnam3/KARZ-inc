@@ -1,3 +1,12 @@
+/**
+ * Date: 2026-04-05
+ * Description: Front-end module for managing user groups in SyncSpace.
+ *              Fetches group data from the server and dynamically renders
+ *              group information in the UI. Handles group creation by sending
+ *              user input (group name, description, and member usernames)
+ *              to the backend API and updates the interface accordingly.
+ */
+
 const API = 'api/groups.php';
 
 // ─── Fetch groups ─────────────────────────────

@@ -1,6 +1,7 @@
 <?php
 /**
  * Date: 2026-04-05
+ * Author: Taewoo Kim
  * Description: Handles the login form POST for SyncSpace. Validates the submitted
  *              email and password against the database, creates a PHP session on
  *              success, and redirects back to the login page with an error on

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Date: 2026-03-31
  * Description: Main dashboard page for SyncSpace. Requires an authenticated
@@ -41,7 +40,7 @@ $initials = strtoupper(substr($username, 0, 1));
 
             <!-- Profile Button -->
             <div class="profile-menu">
-                <button class="profile-btn">
+                <button class="profile-btn" id="profile-toggle" type="button">
                     <span class="profile-avatar"><?= htmlspecialchars($initials) ?></span>
                 </button>
 
@@ -375,8 +374,24 @@ $initials = strtoupper(substr($username, 0, 1));
     </div>
 
     <script>
-        const CURRENT_USER_ID = <?= (int)$_SESSION['user_id'] ?>;
-        const CURRENT_USERNAME = <?= json_encode($_SESSION['username']) ?>;
+    const CURRENT_USER_ID = <?= (int)$_SESSION['user_id'] ?>;
+    const CURRENT_USERNAME = <?= json_encode($_SESSION['username']) ?>;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileMenu = document.querySelector('.profile-menu');
+        const profileToggle = document.getElementById('profile-toggle');
+
+        profileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.contains(e.target)) {
+                profileMenu.classList.remove('open');
+            }
+        });
+    });
     </script>
     <script src="js/events.js"></script>
 
