@@ -370,12 +370,12 @@ body {
     position: relative;
 }
 
-.profile-btn {
+/* .profile-btn {
     border: none;
     background: none;
     cursor: pointer;
     margin-left: 10px;
-}
+} */
 
 .profile-avatar {
     display: inline-flex;
@@ -426,7 +426,12 @@ body {
     transition: 0.2s;
 }
 
-.profile-dropdown a:hover {
+.profile-btn:hover {
+    background: none;
+}
+
+.profile-avatar:hover {
+    transform: none;
     background-color: #bfd8b8;
 }
 
