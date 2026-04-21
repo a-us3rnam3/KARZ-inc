@@ -47,8 +47,8 @@ $initials = strtoupper(substr($username, 0, 1));
 
                 <div class="profile-dropdown">
 
-                    <a href="#">Profile</a>
-                    <a href="#">Settings</a>
+                    <a href="profile.php">Profile</a>
+                    <a href="profile.php">Settings</a>
                     <a href="logout.php">Logout</a>
                 </div>
             </div>
