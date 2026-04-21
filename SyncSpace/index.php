@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Date: 2026-03-31
  * Description: Main dashboard page for SyncSpace. Requires an authenticated
@@ -35,7 +36,6 @@ $initials = strtoupper(substr($username, 0, 1));
 
         <nav class="main-nav">
             <a href="#" class="active">Dashboard</a>
-            <a href="#">My Calendar</a>
             <a href="groups.php">Groups</a>
             <a href="#">Events</a>
 
@@ -122,7 +122,6 @@ $initials = strtoupper(substr($username, 0, 1));
             <section class="priority-legend panel">
                 <div class="legend-header">
                     <h2>Event Priority Legend</h2>
-                    <button class="primary-btn edit-btn">Edit Priority Colours</button>
                 </div>
 
                 <div class="legend-items">
