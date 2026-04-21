@@ -1,12 +1,5 @@
-/*
-Name: Mazen Anklis
-Date Created: April 20, 2026
-Description: Finds shared free time for all members of a selected group
-on a selected date by checking their events, merging busy time blocks,
-and displaying the open time gaps.
-*/
 <?php
-require_once '../db_connect.php';
+require_once 'api/db.php';
 
 $group_id = $_POST['group_id'] ?? 0;
 $date = $_POST['date'] ?? '';
