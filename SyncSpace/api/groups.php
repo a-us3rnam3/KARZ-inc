@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Date: 2026-04-05
  * Description: Handles group management for authenticated SyncSpace users.
@@ -80,6 +81,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
 
+        if ($action === 'check_role') {
+
+            $group_id = (int)($data['group_id'] ?? 0);
+
+            $stmt = $pdo->prepare("
+        SELECT role
+        FROM group_members
+        WHERE group_id = ? AND user_id = ?
+        LIMIT 1
+    ");
+            $stmt->execute([$group_id, $user_id]);
+            $member = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$member) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Not a group member"
+                ]);
+                exit;
+            }
+
+            echo json_encode([
+                "success" => true,
+                "role" => $member['role']
+            ]);
+            exit;
+        }
         // ─────────────────────────────
         // CREATE GROUP
         // ─────────────────────────────
@@ -187,12 +215,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
+        //DELETE GROUP
+        if ($action === 'delete_group') {
+
+            $group_id = (int)($data['group_id'] ?? 0);
+
+            if (!$group_id) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "group_id required"
+                ]);
+                exit;
+            }
+
+            // ensure owner
+            $stmt = $pdo->prepare("
+        SELECT role
+        FROM group_members
+        WHERE group_id = ? AND user_id = ?
+        LIMIT 1
+    ");
+            $stmt->execute([$group_id, $user_id]);
+            $member = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$member || $member['role'] !== 'owner') {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Only owner can delete group"
+                ]);
+                exit;
+            }
+
+            try {
+                $pdo->beginTransaction();
+
+                // 1. remove event links (IMPORTANT)
+                $stmt = $pdo->prepare("DELETE FROM event_groups WHERE group_id = ?");
+                $stmt->execute([$group_id]);
+
+                // 2. remove members
+                $stmt = $pdo->prepare("DELETE FROM group_members WHERE group_id = ?");
+                $stmt->execute([$group_id]);
+
+                // 3. delete group
+                $stmt = $pdo->prepare("DELETE FROM user_groups WHERE group_id = ?");
+                $stmt->execute([$group_id]);
+
+                $pdo->commit();
+
+                echo json_encode([
+                    "success" => true,
+                    "message" => "Group deleted permanently"
+                ]);
+                exit;
+            } catch (PDOException $e) {
+                $pdo->rollBack();
+
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Delete failed"
+                ]);
+                exit;
+            }
+        }
+
         // fallback
         echo json_encode([
             "success" => false,
             "message" => "Unknown action"
         ]);
-
     } catch (PDOException $e) {
         echo json_encode([
             "success" => false,

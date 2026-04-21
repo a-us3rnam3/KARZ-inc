@@ -36,7 +36,6 @@ $initials = strtoupper(substr($username, 0, 1));
         <nav class="main-nav">
             <a href="#" class="active">Dashboard</a>
             <a href="groups.php">Groups</a>
-            <a href="#">Events</a>
 
             <!-- Profile Button -->
             <div class="profile-menu">

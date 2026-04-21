@@ -166,7 +166,66 @@ document.getElementById('create-group-form')
 
 //leave group
 async function leaveGroup() {
-    if (!confirm('Are you sure you want to leave this group?')) return;
+    if (!currentGroupId) return;
+
+    // ask server who user is in this group
+    const resCheck = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: "check_role",
+            group_id: currentGroupId
+        })
+    });
+
+    const check = await resCheck.json();
+
+    if (!check.success) {
+        alert(check.message);
+        return;
+    }
+
+    // OWNER FLOW → destructive delete
+    if (check.role === 'owner') {
+
+        const confirmed = confirm(
+            "You are the OWNER of this group.\n\n" +
+            "Deleting it will:\n" +
+            "• Remove ALL group members\n" +
+            "• Unlink ALL group events\n" +
+            "• Permanently delete the group\n\n" +
+            "This action CANNOT be undone.\n\n" +
+            "Click OK to permanently delete this group."
+        );
+
+        if (!confirmed) return;
+
+        const res = await fetch(API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: "delete_group",
+                group_id: currentGroupId
+            })
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+            alert("Group permanently deleted.");
+            closeGroupModal();
+            loadGroups();
+        } else {
+            alert(data.message);
+        }
+
+        return;
+    }
+
+    // NORMAL MEMBER FLOW → just leave group
+    const confirmed = confirm("Leave this group?");
+
+    if (!confirmed) return;
 
     const res = await fetch(API, {
         method: 'POST',
@@ -179,14 +238,12 @@ async function leaveGroup() {
 
     const data = await res.json();
 
-    console.log("LEAVE GROUP RESPONSE:", data);
-
     if (data.success) {
-        alert('You left the group');
+        alert("You left the group");
         closeGroupModal();
         loadGroups();
     } else {
-        alert(data.message || 'Failed to leave group');
+        alert(data.message);
     }
 }
 
