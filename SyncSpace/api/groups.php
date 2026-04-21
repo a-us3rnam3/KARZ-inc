@@ -7,6 +7,12 @@
  *              returned in structured JSON format, including group details
  *              and member usernames.
  */
+// SyncSpace — Groups API
+// Marcus Rotaru
+//
+// GET    /api/groups.php
+// POST   /api/groups.php
+// DELETE /api/groups.php
 session_start();
 require_once 'db.php';
 
@@ -126,4 +132,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->rollBack();
         echo json_encode(["success" => false, "message" => $e->getMessage()]);
     }
+}
+
+// ─── DELETE: Leave group ─────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+
+    $data = json_decode(file_get_contents("php://input"), true);
+    $group_id = $data['group_id'] ?? null;
+
+    if (!$group_id) {
+        echo json_encode(["success" => false, "message" => "group_id required"]);
+        exit;
+    }
+
+    // prevent owner from leaving (optional safety)
+    $stmt = $pdo->prepare("
+        SELECT role FROM group_members
+        WHERE group_id = ? AND user_id = ?
+    ");
+    $stmt->execute([$group_id, $user_id]);
+    $member = $stmt->fetch();
+
+    if (!$member) {
+        echo json_encode(["success" => false, "message" => "Not a member"]);
+        exit;
+    }
+
+    if ($member['role'] === 'owner') {
+        echo json_encode([
+            "success" => false,
+            "message" => "Owner cannot leave group"
+        ]);
+        exit;
+    }
+
+    $stmt = $pdo->prepare("
+        DELETE FROM group_members
+        WHERE group_id = ? AND user_id = ?
+    ");
+    $stmt->execute([$group_id, $user_id]);
+
+    echo json_encode(["success" => true]);
+    exit;
 }

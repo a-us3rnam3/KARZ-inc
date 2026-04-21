@@ -1,3 +1,5 @@
+//groups.php
+
 <?php
 /**
  * Date: 2026-04-05
@@ -120,6 +122,42 @@ function scrollToCreate() {
         .scrollIntoView({ behavior: 'smooth' });
 }
 </script>
+
+<!-- Group Detail Modal -->
+<div id="group-modal" class="modal-overlay">
+    <div class="modal-card">
+
+        <div class="modal-header">
+            <h2 id="group-title"></h2>
+            <button class="modal-close-x" onclick="closeGroupModal()">×</button>
+        </div>
+
+        <div class="detail-body">
+            <div class="detail-row">
+                <div class="detail-label">Description</div>
+                <div id="group-desc"></div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-label">Members</div>
+                <div id="group-members"></div>
+            </div>
+        </div>
+
+        <hr class="profile-divider">
+
+        <h3>Group Events</h3>
+        <ul id="group-events" class="event-list"></ul>
+
+        <h3>Your Events</h3>
+        <ul id="user-events" class="event-list"></ul>
+
+        <div class="modal-actions">
+            <button class="danger-btn" onclick="leaveGroup()">Leave Group</button>
+        </div>
+
+    </div>
+</div>
 
 </body>
 </html>
