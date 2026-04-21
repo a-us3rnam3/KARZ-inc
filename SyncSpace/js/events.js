@@ -320,14 +320,20 @@ async function handleFreeTimeSubmit(e) {
         const res = await fetch('api/find_free_time.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `group_id=${group_id}&date=${date}`
+            body: `group_id=${encodeURIComponent(group_id)}&date=${encodeURIComponent(date)}`
         });
 
-        const html = await res.text();
-        resBox.innerHTML = html;
+        const text = await res.text();
+
+        if (!res.ok) {
+            resBox.innerHTML = `Server error (${res.status})<br><pre>${text}</pre>`;
+            return;
+        }
+
+        resBox.innerHTML = text;
 
     } catch (err) {
-        resBox.innerHTML = 'Error finding free time.';
+        resBox.innerHTML = 'Error finding free time: ' + err.message;
     }
 }
 
@@ -443,8 +449,8 @@ function expandRecurring(baseEvents) {
 
         const cur = new Date(baseStart);
         for (let i = 0; i < 500; i++) {
-            if (ev.repeat_type === 'daily')        cur.setDate(cur.getDate() + 1);
-            else if (ev.repeat_type === 'weekly')  cur.setDate(cur.getDate() + 7);
+            if (ev.repeat_type === 'daily') cur.setDate(cur.getDate() + 1);
+            else if (ev.repeat_type === 'weekly') cur.setDate(cur.getDate() + 7);
             else if (ev.repeat_type === 'monthly') cur.setMonth(cur.getMonth() + 1);
 
             if (cur > limit) break;
@@ -452,7 +458,7 @@ function expandRecurring(baseEvents) {
             expanded.push({
                 ...ev,
                 start_time: toDbTimestamp(new Date(cur)),
-                end_time:   toDbTimestamp(new Date(cur.getTime() + duration)),
+                end_time: toDbTimestamp(new Date(cur.getTime() + duration)),
             });
         }
     }
@@ -467,7 +473,7 @@ function expandRecurring(baseEvents) {
  */
 function toDbTimestamp(date) {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ` +
-           `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 // ─── Calendar Rendering ───────────────────────────────────────────────────────

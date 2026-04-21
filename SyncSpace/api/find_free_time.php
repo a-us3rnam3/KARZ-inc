@@ -1,5 +1,5 @@
 <?php
-require_once 'api/db.php';
+require_once 'db.php';
 
 $group_id = $_POST['group_id'] ?? 0;
 $date = $_POST['date'] ?? '';
