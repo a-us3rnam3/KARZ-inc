@@ -932,20 +932,26 @@ body {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────── */
-
-@media (max-width: 1100px) {
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* Tablet */
+@media (max-width: 1024px) {
+    .site-header {
+        padding: 18px 22px;
     }
 
-    .bottom-grid {
-        grid-template-columns: 1fr;
+    .main-nav {
+        gap: 10px;
+        justify-content: flex-end;
     }
-}
 
-@media (max-width: 850px) {
+    .main-nav a {
+        padding: 10px 14px;
+        font-size: 0.95rem;
+    }
+
     .app-layout {
         grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 20px;
     }
 
     .sidebar {
@@ -955,42 +961,202 @@ body {
     .main-content {
         order: 1;
     }
+
+    .bottom-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .calendar-grid {
+        gap: 8px;
+    }
+
+    .day {
+        min-height: 95px;
+        padding: 8px;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .calendar-controls {
+        align-self: flex-end;
+    }
 }
 
-@media (max-width: 700px) {
+/* Phone */
+@media (max-width: 768px) {
+    .site-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 18px 16px;
+    }
+
+    .logo-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .large-logo {
+        width: 95px;
+    }
+
+    .main-nav {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .main-nav a {
+        padding: 10px 14px;
+        font-size: 0.92rem;
+    }
+
+    .profile-menu {
+        margin-top: 4px;
+    }
+
+    .profile-dropdown {
+        right: 50%;
+        transform: translateX(50%);
+        top: 52px;
+        min-width: 180px;
+    }
+
+    .app-layout {
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .sidebar-card,
+    .calendar-section,
+    .panel,
+    .priority-legend {
+        padding: 16px;
+        border-radius: 14px;
+    }
+
+    .view-switcher {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .view-btn {
+        width: 100%;
+    }
+
+    .section-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .calendar-controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
     .calendar-grid {
         grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 
     .day-name {
         display: none;
     }
 
-    .stats-grid {
+    .day {
+        min-height: 100px;
+    }
+
+    .event-pill {
+        font-size: 0.68rem;
+        padding: 4px 6px;
+    }
+
+    .legend-items {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .modal-card {
+        max-width: 100%;
+        padding: 20px;
+        border-radius: 14px;
+    }
+
+    .form-grid-2 {
         grid-template-columns: 1fr;
     }
 
-    .site-header {
+    .modal-actions {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
     }
 
-    .main-nav {
+    .modal-actions button {
         width: 100%;
+    }
+
+    .detail-row {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .detail-label {
+        min-width: 0;
     }
 }
 
-@media (max-width: 600px) {
-    .auth-wrapper {
-        padding: 16px;
+/* Small phones */
+@media (max-width: 480px) {
+    .site-header {
+        padding: 14px 12px;
     }
 
-    .auth-card {
-        padding: 20px;
-        border-radius: 16px;
+    .large-logo {
+        width: 80px;
     }
 
-    .auth-card h1 {
-        font-size: 1.5rem;
+    .main-nav a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .profile-avatar {
+        width: 34px;
+        height: 34px;
+        font-size: 0.85rem;
+    }
+
+    .app-layout {
+        padding: 12px;
+    }
+
+    .sidebar-card h2,
+    .panel h2,
+    .section-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .calendar-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .day {
+        min-height: 90px;
+    }
+
+    .calendar-controls span {
+        font-size: 0.95rem;
+    }
+
+    .primary-btn,
+    .secondary-btn,
+    .calendar-controls button {
+        padding: 10px 12px;
+        font-size: 0.9rem;
     }
 }
