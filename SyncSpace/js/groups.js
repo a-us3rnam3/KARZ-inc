@@ -1,6 +1,6 @@
 
 /**
- * groups.js
+ * Author: Marcus Rotaru
  * Date: 2026-04-05
  * Description: Front-end module for managing user groups in SyncSpace.
  *              Fetches group data from the server and dynamically renders

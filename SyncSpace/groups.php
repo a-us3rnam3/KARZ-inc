@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Author: Marcus Rotaru
  * Date: 2026-04-05
  * Description: Main groups page for SyncSpace. Requires an authenticated
  *              session, displays the logged-in user's profile information,
@@ -24,6 +25,7 @@ $initials = strtoupper(substr($username, 0, 1));
     <meta name="viewport" content="width=device-width">
     <title>SyncSpace - Groups</title>
     <link rel="stylesheet" href="css/main.css">
+    <link rel="shortcut icon" href="images/croppedLogo.png">
 </head>
 
 <body>
