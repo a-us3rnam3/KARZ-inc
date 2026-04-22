@@ -1,5 +1,6 @@
 <?php
 /**
+ * Author: Mazen Anklis
  * Date: 2026-04-05
  * Description: Calculates common free time for all members of a selected group
  *              on a specific date. Retrieves all events for group members within
