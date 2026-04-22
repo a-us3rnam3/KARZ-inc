@@ -82,7 +82,12 @@ async function loadGroupEvents(groupId) {
     const data = await res.json();
 
     const list = document.getElementById('group-events');
-    list.innerHTML = '';
+    list.innerHTML = `
+        <li style="display:flex; justify-content:space-between; font-weight:bold; padding:6px 0;">
+            <span>Event</span>
+            <span>Shared</span>
+        </li>
+    `;
 
     if (!data.events || !data.events.length) {
         list.innerHTML = '<li>No group events</li>';
@@ -92,10 +97,12 @@ async function loadGroupEvents(groupId) {
     data.events.forEach(e => {
         const li = document.createElement('li');
 
+        const title = e.anonymous ? '(Private Event)' : e.title;
+
         li.innerHTML = `
-            <strong>${e.title}</strong>
-            <span>${e.start_time}</span>
-        `;
+        <strong>${title}</strong>
+        <span>${e.start_time}</span>
+    `;
 
         list.appendChild(li);
     });
@@ -109,23 +116,30 @@ async function loadUserEvents(groupId) {
     const resGroup = await fetch(`${EVENT_API}?group_id=${groupId}`);
     const groupData = await resGroup.json();
 
-    const groupEventIds = new Set(
-        (groupData.events || []).map(e => e.event_id)
+    const groupEventsMap = new Map(
+        (groupData.events || []).map(ev => [ev.event_id, ev])
     );
 
     const list = document.getElementById('user-events');
     list.innerHTML = '';
 
     userEvents.forEach(e => {
-        const isShared = groupEventIds.has(e.event_id);
+
+        const groupEvent = groupEventsMap.get(e.event_id) || null;
+        const isShared = groupEvent !== null;
+        const isAnonymous = isShared && Boolean(groupEvent.anonymous);
+
+        // aHIDE anonymous shared events (non-owners)
+        if (isShared && isAnonymous) return;
 
         const li = document.createElement('li');
+        const title = isAnonymous ? '(Private Event)' : e.title;
 
         li.innerHTML =
             `
             <label style="display:flex; justify-content:space-between; align-items:center; width:100%;">
             <span>
-            <strong>${e.title}</strong><br>
+            <strong>${title}</strong><br>
             <small>${e.start_time}</small>
             </span>
 
