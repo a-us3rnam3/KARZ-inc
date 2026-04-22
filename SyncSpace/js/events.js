@@ -32,7 +32,8 @@ async function fetchEvents() {
         personalEvents.forEach(ev => {
             eventMap.set(ev.event_id, {
                 ...ev,
-                group_ids: [] // IMPORTANT
+                group_ids: [], // IMPORTANT
+                group_anonymous_map: {} // { group_id: true/false }
             });
         });
 
@@ -48,7 +49,8 @@ async function fetchEvents() {
 
             return data.events.map(ev => ({
                 ...ev,
-                group_id: g.group_id
+                group_id: g.group_id,
+                group_anonymous: ev.anonymous
             }));
         });
 
@@ -57,13 +59,29 @@ async function fetchEvents() {
         // 4. merge into map
         groupEvents.forEach(ev => {
             if (eventMap.has(ev.event_id)) {
-                // already exists → just add group
-                eventMap.get(ev.event_id).group_ids.push(ev.group_id);
+                // already exists → add group + anonymity
+                const existing = eventMap.get(ev.event_id);
+
+                // ensure arrays/maps exist
+                if (!existing.group_ids) existing.group_ids = [];
+                if (!existing.group_anonymous_map) existing.group_anonymous_map = {};
+
+                // add group id if not already present
+                if (!existing.group_ids.includes(ev.group_id)) {
+                    existing.group_ids.push(ev.group_id);
+                }
+
+                // store group-level anonymity
+                existing.group_anonymous_map[ev.group_id] = ev.group_anonymous;
+
             } else {
                 // event ONLY exists via group
                 eventMap.set(ev.event_id, {
                     ...ev,
-                    group_ids: [ev.group_id]
+                    group_ids: [ev.group_id],
+                    group_anonymous_map: {
+                        [ev.group_id]: ev.group_anonymous
+                    }
                 });
             }
         });
@@ -988,7 +1006,20 @@ function initNavigation() {
  * @returns {boolean} true if the event is anonymous and owned by another user
  */
 function isHidden(ev) {
-    return ev.anonymous && ev.owner_user_id !== CURRENT_USER_ID;
+    // personal anonymity
+    if (ev.anonymous && ev.owner_user_id !== CURRENT_USER_ID) {
+        return true;
+    }
+
+    // group anonymity
+    if (ev.group_ids && ev.group_anonymous_map) {
+        return ev.group_ids.some(gid =>
+            ev.group_anonymous_map[gid] &&
+            ev.owner_user_id !== CURRENT_USER_ID
+        );
+    }
+
+    return false;
 }
 
 /**

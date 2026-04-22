@@ -121,10 +121,66 @@ async function loadUserEvents(groupId) {
 
         const li = document.createElement('li');
 
-        li.innerHTML = `
-            <strong>${e.title}</strong>
-            <span>${isShared ? '✔ Shared' : 'Not shared'}</span>
-        `;
+        li.innerHTML =
+            `
+            <label style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+            <span>
+            <strong>${e.title}</strong><br>
+            <small>${e.start_time}</small>
+            </span>
+
+            <input type="checkbox" ${isShared ? 'checked' : ''}>
+            </label>
+            `;
+
+        const checkbox = li.querySelector('input');
+
+        checkbox.addEventListener('change', async () => {
+            try {
+                let res;
+
+                if (checkbox.checked) {
+                    // SHARE
+                    res = await fetch(EVENT_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: "share",
+                            event_id: e.event_id,
+                            group_id: groupId
+                        })
+                    });
+
+                } else {
+                    // UNSHARE
+                    res = await fetch(EVENT_API, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            action: "unshare",
+                            event_id: e.event_id,
+                            group_id: groupId
+                        })
+                    });
+                }
+
+                const data = await res.json();
+
+                if (!data.success) {
+                    alert(data.message);
+                    checkbox.checked = !checkbox.checked; // revert
+                    return;
+                }
+
+                // Only UI update after success
+                loadGroupEvents(currentGroupId);
+
+            } catch (err) {
+                console.error(err);
+                alert("Network/API error");
+                checkbox.checked = !checkbox.checked; // revert
+            }
+        });
 
         list.appendChild(li);
     });

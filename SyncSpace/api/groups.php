@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $user_id = $_SESSION['user_id'];
-$DEBUG = true; // ⚠️ set to false in production
+$DEBUG = false;
 
 // ─── GET: Fetch user's groups ─────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
