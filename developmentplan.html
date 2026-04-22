@@ -378,19 +378,30 @@
                 </ul>
             </li>
         </ul>
-
-        <p><strong>8. Client Feedback Increment 2</strong></p>
+        
+        <p><strong>Changes that We Made - Final Delivery</strong></p>
+        
+        <p><strong> Client Feedback Increment 2</strong></p>
         <ul>
             <li>"It's looking great, just make sure that groups and sharing work properly"
                 <ul>
                     <li>We continued to follow the original developement plan</li>
                 </ul>
             </li>
-        
-        <p><strong>Changes that We Made - Final Delivery</strong></p>
-        
-        <p>Fully Implemented Features</p>
-        <ul>
+
+
+        <p><strong>New Data Table</strong></p>
+        <li><strong>EVENT_GROUPS</strong>
+                <ul>
+                    <li>Why is it needed: This acts as a linking table which links events to any amount of groups required. It also allows the removal of events from groups without actually modifying the actuall event</li>
+                    <li>event_group_id INT AUTO_INCREMENT PRIMARY KEY</li>
+                    <li>event_id INT NOT NULL</li>
+                    <li>group_id INT NOT NULL</li>
+                    <li>anonymous TINYINT(1) NOT NULL DEFAULT 0</li>
+                </ul>
+            </li>
+
+        <p><strong>Implemented Features</strong></p>
             <li><strong>1. User Registration and Login</strong>
                 <ul>
                     <li>Secure authentication using session-based login</li>
@@ -444,7 +455,7 @@
             </li>
         </ul>
 
-    <p>Partially Implemented Features</p>
+    <p><strong>Partially Implemented Features</strong></p>
         <ul>
             <li><strong>1. Group Management</strong>
                 <ul>
@@ -461,7 +472,7 @@
             </li>
         </ul>
 
-    <p>Not Implemented Features</p>
+    <p><strong>Not Implemented Features</strong></p>
         <ul>
             <li><strong>1. Modify or Skip Recurring Events</strong>
                 <ul>
