@@ -2,6 +2,7 @@
 
 /**
  * Date: 2026-03-31
+ * Authors: ALL TEAM MEMBERS
  * Description: Main dashboard page for SyncSpace. Requires an authenticated
  *              session, then renders the calendar, sidebar, upcoming events panel,
  *              and the Add Event, Event Detail, and Share Event modal dialogs.
@@ -155,9 +156,7 @@ $initials = strtoupper(substr($username, 0, 1));
         <p>&copy; 2026 KARZ inc. | SyncSpace Calendar App</p>
     </footer>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         Add Event Modal
-         ═══════════════════════════════════════════════════════════════════════ -->
+    <!--Add Event Modal-->
     <div id="event-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-heading">
         <div class="modal-card">
 
@@ -257,9 +256,7 @@ $initials = strtoupper(substr($username, 0, 1));
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-         Event Detail Modal
-         ═══════════════════════════════════════════════════════════════════════ -->
+    <!--Event Detail Modal -->
     <div id="detail-modal" class="modal-overlay" role="dialog" aria-modal="true">
         <div class="modal-card">
 
@@ -303,9 +300,7 @@ $initials = strtoupper(substr($username, 0, 1));
         </div>
     </div>
 
-    <!-- ═══════════════════════════════════════════════════════════════════════
-     Share Event Modal
-     ═══════════════════════════════════════════════════════════════════════ -->
+    <!--Share Event Modal -->
     <div id="share-modal" class="modal-overlay" role="dialog" aria-modal="true">
         <div class="modal-card">
 
@@ -344,9 +339,7 @@ $initials = strtoupper(substr($username, 0, 1));
             </form>
         </div>
     </div>
-    <!-- ═══════════════════════════════════════════════════════════════════════
-     Find Free Time Modal
-     ═══════════════════════════════════════════════════════════════════════ -->
+    <!-- Find Free Time Modal-->
     <div id="free-time-modal" class="modal-overlay" role="dialog" aria-modal="true">
         <div class="modal-card">
 

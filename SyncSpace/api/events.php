@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name: Erfan Zamani
  * Date: 2026-04-01
@@ -35,7 +36,7 @@ if (!isset($_SESSION['user_id'])) {
 
 $currentUserId = (int)$_SESSION['user_id'];
 
-// ─── GET: return events visible to the current user ──────────────────────────
+// GET: return events visible to the current user
 if ($method === 'GET') {
     // Own events + events shared to groups the user belongs to, with repeat info
     $stmt = $pdo->prepare("
@@ -73,7 +74,7 @@ if ($method === 'GET') {
     exit;
 }
 
-// ─── DELETE: remove an event by ID ───────────────────────────────────────────
+// DELETE: remove an event by ID
 if ($method === 'DELETE' || ($method === 'POST' && ($_GET['action'] ?? '') === 'delete')) {
     $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
@@ -100,7 +101,7 @@ if ($method === 'DELETE' || ($method === 'POST' && ($_GET['action'] ?? '') === '
     exit;
 }
 
-// ─── POST: insert a new event ─────────────────────────────────────────────────
+// POST: insert a new event
 if ($method === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Name: Erfan Zamani
  * Date: 2026-04-01
@@ -13,7 +14,7 @@ require 'db.php';
 
 $tables = [];
 
-// ─── USERS ────────────────────────────────────────────────────────────────────
+// USERS 
 $tables['users'] = "
     CREATE TABLE IF NOT EXISTS users (
         user_id       INT           AUTO_INCREMENT PRIMARY KEY,
@@ -24,7 +25,7 @@ $tables['users'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── USER_GROUPS ──────────────────────────────────────────────────────────────
+//USER_GROUPS
 $tables['user_groups'] = "
     CREATE TABLE IF NOT EXISTS user_groups (
         group_id    INT           AUTO_INCREMENT PRIMARY KEY,
@@ -36,7 +37,7 @@ $tables['user_groups'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── GROUP_MEMBERS ────────────────────────────────────────────────────────────
+//GROUP_MEMBERS 
 $tables['group_members'] = "
     CREATE TABLE IF NOT EXISTS group_members (
         membership_id INT          AUTO_INCREMENT PRIMARY KEY,
@@ -49,7 +50,7 @@ $tables['group_members'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── EVENTS ───────────────────────────────────────────────────────────────────
+//EVENTS
 $tables['events'] = "
     CREATE TABLE IF NOT EXISTS events (
         event_id        INT           AUTO_INCREMENT PRIMARY KEY,
@@ -72,7 +73,7 @@ $tables['events'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── RECURRING_EVENT ──────────────────────────────────────────────────────────
+// RECURRING_EVENT
 $tables['recurring_event'] = "
     CREATE TABLE IF NOT EXISTS recurring_event (
         recurring_id      INT          AUTO_INCREMENT PRIMARY KEY,
@@ -86,7 +87,7 @@ $tables['recurring_event'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── EVENT_EXCEPTIONS ─────────────────────────────────────────────────────────
+//EVENT_EXCEPTIONS
 $tables['event_exceptions'] = "
     CREATE TABLE IF NOT EXISTS event_exceptions (
         exception_id    INT           AUTO_INCREMENT PRIMARY KEY,
@@ -101,9 +102,8 @@ $tables['event_exceptions'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// UNIQUE KEY is very useful for preventing dupes
-// Join table to allow for an event to linked to as many groups as needed
-// ─── EVENT_GROUPS ─────────────────────────────────────────────────────────
+
+//EVENT_GROUPS
 $tables['event_groups'] = "
     CREATE TABLE IF NOT EXISTS event_groups (
         event_group_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -118,8 +118,7 @@ $tables['event_groups'] = "
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ";
 
-// ─── Run ──────────────────────────────────────────────────────────────────────
-
+// Run 
 $results = [];
 foreach ($tables as $name => $sql) {
     try {
@@ -130,8 +129,6 @@ foreach ($tables as $name => $sql) {
     }
 }
 
-// ─── Migrations: fix existing tables if columns changed ───────────────────────
-// Rename is_anonym_in_group → anonymous if the old column still exists
 try {
     $pdo->exec("ALTER TABLE event_groups CHANGE is_anonym_in_group anonymous TINYINT(1) NOT NULL DEFAULT 0");
     $results[] = "✓ migration: event_groups.is_anonym_in_group → anonymous";
@@ -140,7 +137,7 @@ try {
     $results[] = "~ migration skipped: " . $e->getMessage();
 }
 
-// ─── Seed: placeholder user so events can be added before auth is integrated ──
+//  Seed: placeholder user so events can be added before auth is integrated 
 try {
     $pdo->exec("
         INSERT IGNORE INTO users (user_id, username, email, password_hash)

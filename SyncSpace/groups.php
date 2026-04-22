@@ -33,7 +33,7 @@ $initials = strtoupper(substr($username, 0, 1));
     <!-- Header -->
     <header class="site-header">
         <div class="logo-area">
-            <img src="images/logo.png" class="logo-img large-logo">
+            <img src="images/logo.png" class="logo-img large-logo" alt="SyncSpace Logo">
         </div>
 
         <nav class="main-nav">
@@ -116,7 +116,6 @@ $initials = strtoupper(substr($username, 0, 1));
     <script src="js/groups.js"></script>
 
     <script>
-        // smooth scroll to form
         function scrollToCreate() {
             document.getElementById('create-group-section')
                 .scrollIntoView({

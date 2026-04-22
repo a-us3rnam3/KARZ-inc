@@ -28,7 +28,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $DEBUG = false;
 
-// ─── GET: Fetch user's groups ─────────────────────────────
+//  GET: Fetch user's groups
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
     $stmt = $pdo->prepare("
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     exit;
 }
 
-// ─── POST: Router for group actions ────────────────────
+// POST: Router for group actions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $data = json_decode(file_get_contents("php://input"), true);
@@ -108,9 +108,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
             exit;
         }
-        // ─────────────────────────────
+
         // CREATE GROUP
-        // ─────────────────────────────
         if ($action === 'create') {
 
             $name = trim($data['group_name'] ?? '');
@@ -170,9 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        // ─────────────────────────────
         // LEAVE GROUP
-        // ─────────────────────────────
         if ($action === 'leave') {
 
             $group_id = (int)($data['group_id'] ?? 0);

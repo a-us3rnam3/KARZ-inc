@@ -24,7 +24,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 try {
 
-    //GET - get all events associated with a group_id
+    // get all events associated with a group_id
     if ($method === 'GET') {
 
         if (!isset($_GET['group_id'])) {
@@ -76,139 +76,131 @@ try {
 
 
 
-    // ───────────────────────────────
-    // POST → Existing logic 
-    // ───────────────────────────────
+    // POST then Existing logic 
     if ($method === 'POST') {
 
-    $data = json_decode(file_get_contents("php://input"), true);
+        $data = json_decode(file_get_contents("php://input"), true);
 
-    $event_id = isset($data['event_id']) ? (int)$data['event_id'] : null;
-    $group_id = isset($data['group_id']) ? (int)$data['group_id'] : null;
-    $anonymous = isset($data['anonymous']) ? (bool)$data['anonymous'] : false;
-    $action = $data['action'] ?? 'share';
+        $event_id = isset($data['event_id']) ? (int)$data['event_id'] : null;
+        $group_id = isset($data['group_id']) ? (int)$data['group_id'] : null;
+        $anonymous = isset($data['anonymous']) ? (bool)$data['anonymous'] : false;
+        $action = $data['action'] ?? 'share';
 
-    // ───────────────────────────────
-    // UNSHARE
-    // ───────────────────────────────
-    if ($action === 'unshare') {
+        // UNSHARE
+        if ($action === 'unshare') {
 
-        if (!$event_id || !$group_id) {
-            echo json_encode([
-                "success" => false,
-                "message" => "event_id and group_id are required"
-            ]);
-            exit;
-        }
+            if (!$event_id || !$group_id) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "event_id and group_id are required"
+                ]);
+                exit;
+            }
 
-        // AUTH CHECK
-        $stmt = $pdo->prepare("
+            // AUTH CHECK
+            $stmt = $pdo->prepare("
             SELECT 1 
             FROM group_members 
             WHERE group_id = ? AND user_id = ?
             LIMIT 1
         ");
-        $stmt->execute([$group_id, $_SESSION['user_id']]);
+            $stmt->execute([$group_id, $_SESSION['user_id']]);
 
-        if ($stmt->rowCount() === 0) {
-            http_response_code(403);
-            echo json_encode([
-                "success" => false,
-                "message" => "Forbidden: not a group member"
-            ]);
-            exit;
-        }
+            if ($stmt->rowCount() === 0) {
+                http_response_code(403);
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Forbidden: not a group member"
+                ]);
+                exit;
+            }
 
-        $stmt = $pdo->prepare("
+            $stmt = $pdo->prepare("
             DELETE FROM event_groups
             WHERE event_id = ? AND group_id = ?
         ");
-        $stmt->execute([$event_id, $group_id]);
+            $stmt->execute([$event_id, $group_id]);
 
-        echo json_encode([
-            "success" => true,
-            "message" => "Event removed from group"
-        ]);
-        exit;
-    }
-
-    // ───────────────────────────────
-    // SHARE
-    // ───────────────────────────────
-    if ($action === 'share') {
-
-        if (!$event_id || !$group_id) {
             echo json_encode([
-                "success" => false,
-                "message" => "Valid event_id and group_id are required"
+                "success" => true,
+                "message" => "Event removed from group"
             ]);
             exit;
         }
 
-        // Check event exists
-        $stmt = $pdo->prepare("SELECT event_id FROM events WHERE event_id = ? LIMIT 1");
-        $stmt->execute([$event_id]);
+        // SHARE
+        if ($action === 'share') {
 
-        if ($stmt->rowCount() === 0) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Event not found"
-            ]);
-            exit;
-        }
+            if (!$event_id || !$group_id) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Valid event_id and group_id are required"
+                ]);
+                exit;
+            }
 
-        // Check group exists
-        $stmt = $pdo->prepare("SELECT group_id FROM user_groups WHERE group_id = ? LIMIT 1");
-        $stmt->execute([$group_id]);
+            // Check event exists
+            $stmt = $pdo->prepare("SELECT event_id FROM events WHERE event_id = ? LIMIT 1");
+            $stmt->execute([$event_id]);
 
-        if ($stmt->rowCount() === 0) {
-            echo json_encode([
-                "success" => false,
-                "message" => "Group not found"
-            ]);
-            exit;
-        }
+            if ($stmt->rowCount() === 0) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Event not found"
+                ]);
+                exit;
+            }
 
-        // Prevent duplicates
-        $stmt = $pdo->prepare("
+            // Check group exists
+            $stmt = $pdo->prepare("SELECT group_id FROM user_groups WHERE group_id = ? LIMIT 1");
+            $stmt->execute([$group_id]);
+
+            if ($stmt->rowCount() === 0) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Group not found"
+                ]);
+                exit;
+            }
+
+            // Prevent duplicates
+            $stmt = $pdo->prepare("
             SELECT event_group_id 
             FROM event_groups 
             WHERE event_id = ? AND group_id = ?
         ");
-        $stmt->execute([$event_id, $group_id]);
+            $stmt->execute([$event_id, $group_id]);
 
-        if ($stmt->rowCount() > 0) {
+            if ($stmt->rowCount() > 0) {
+                echo json_encode([
+                    "success" => false,
+                    "message" => "Event already shared with this group"
+                ]);
+                exit;
+            }
+
+            $stmt = $pdo->prepare("
+            INSERT INTO event_groups (event_id, group_id, anonymous)
+            VALUES (?, ?, ?)
+        ");
+            $stmt->execute([$event_id, $group_id, (int)$anonymous]);
+
             echo json_encode([
-                "success" => false,
-                "message" => "Event already shared with this group"
+                "success" => true,
+                "message" => "Event shared with group successfully"
             ]);
             exit;
         }
 
-        $stmt = $pdo->prepare("
-            INSERT INTO event_groups (event_id, group_id, anonymous)
-            VALUES (?, ?, ?)
-        ");
-        $stmt->execute([$event_id, $group_id, (int)$anonymous]);
-
+        // Unknown action
         echo json_encode([
-            "success" => true,
-            "message" => "Event shared with group successfully"
+            "success" => false,
+            "message" => "Unknown action"
         ]);
         exit;
     }
 
-    // Unknown action
-    echo json_encode([
-        "success" => false,
-        "message" => "Unknown action"
-    ]);
-    exit;
-}
-
-    // ───────────────────────────────
     // Fallback
-    // ───────────────────────────────
     http_response_code(405);
     echo json_encode([
         "success" => false,

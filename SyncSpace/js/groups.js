@@ -14,7 +14,7 @@ const USER_EVENTS_API = 'api/events.php';
 const API = 'api/groups.php'
 let currentGroupId = null;
 
-// ─── Fetch groups ─────────────────────────────
+// Fetch groups
 async function loadGroups() {
     const res = await fetch(API);
     const groups = await res.json();
@@ -200,7 +200,7 @@ async function loadUserEvents(groupId) {
     });
 }
 
-// ─── Create group ─────────────────────────────
+//Create group
 document.getElementById('create-group-form')
     .addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -254,8 +254,7 @@ async function leaveGroup() {
         alert(check.message);
         return;
     }
-
-    // OWNER FLOW → destructive delete
+    // destructive delete
     if (check.role === 'owner') {
 
         const confirmed = confirm(
@@ -292,7 +291,6 @@ async function leaveGroup() {
         return;
     }
 
-    // NORMAL MEMBER FLOW → just leave group
     const confirmed = confirm("Leave this group?");
 
     if (!confirmed) return;

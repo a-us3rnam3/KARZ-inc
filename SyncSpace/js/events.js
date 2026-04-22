@@ -13,8 +13,7 @@ const API = 'api/events.php';
 // CURRENT_USER_ID is provided by index.php
 
 // Erfan Zamani
-// ─── API Calls ────────────────────────────────────────────────────────────────
-
+// API Calls
 /**
  * Fetches all events visible to the current user from the server.
  *
@@ -59,7 +58,7 @@ async function fetchEvents() {
         // 4. merge into map
         groupEvents.forEach(ev => {
             if (eventMap.has(ev.event_id)) {
-                // already exists → add group + anonymity
+                // already exists then add group + anonymity
                 const existing = eventMap.get(ev.event_id);
 
                 // ensure arrays/maps exist
@@ -75,7 +74,7 @@ async function fetchEvents() {
                 existing.group_anonymous_map[ev.group_id] = ev.group_anonymous;
 
             } else {
-                // event ONLY exists via group
+                // event only exists via group
                 eventMap.set(ev.event_id, {
                     ...ev,
                     group_ids: [ev.group_id],
@@ -161,7 +160,7 @@ async function loadGroupsIntoDropdown() {
     }
 }
 
-// ─── State ────────────────────────────────────────────────────────────────────
+// State 
 
 const MONTH_NAMES = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -180,7 +179,7 @@ let state = {
     showPersonal: true
 };
 
-// ─── Add-Event Modal ──────────────────────────────────────────────────────────
+// Add-Event Modal
 
 /**
  * Opens the Add Event modal and pre-fills the date field.
@@ -220,7 +219,7 @@ function setAllDayFields(isAllDay) {
     document.getElementById('time-fields').style.display = isAllDay ? 'none' : 'grid';
 }
 
-// ─── Detail Modal ─────────────────────────────────────────────────────────────
+// Detail Modal
 
 /**
  * Opens the Event Detail modal and populates it with the given event's data.
@@ -280,7 +279,7 @@ function closeDetailModal() {
 }
 
 // Marcus Rotaru
-// ─── Share Modal ────────────────────────────────────────────────────────────
+// Share Modal
 
 /**
  * Opens the Share Event modal, loads available groups from the API, and
@@ -332,7 +331,7 @@ function closeShareModal() {
     document.getElementById('share-modal').classList.remove('open');
 }
 // Mazen Anklis
-// ─── Free Time Modal ─────────────────────────────────────────────────────────
+//Free Time Modal
 
 /**
  * Opens the Find Free Time modal, loads available groups, and resets the
@@ -413,7 +412,7 @@ async function handleFreeTimeSubmit(e) {
     }
 }
 
-// ─── Form Submission ──────────────────────────────────────────────────────────
+//Form Submission
 
 /**
  * Handles Add Event form submission. Validates time order, builds the payload,
@@ -488,7 +487,6 @@ async function handleShareSubmit(e) {
         anonymous: anonymous
     };
 
-    // TODO: connect to backend endpoint
     await fetch('api/event_groups.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -499,7 +497,7 @@ async function handleShareSubmit(e) {
     alert('Event shared successfully.');
 }
 
-// ─── Recurring Event Expansion ────────────────────────────────────────────────
+// Recurring Event Expansion 
 
 /**
  * Expands each recurring event into individual instances up to 3 months ahead
@@ -552,7 +550,7 @@ function toDbTimestamp(date) {
         `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
-// ─── Calendar Rendering ───────────────────────────────────────────────────────
+// Calendar Rendering
 
 /**
  * Renders the calendar by delegating to the appropriate view function based
@@ -605,7 +603,7 @@ async function initGroupFilters() {
             refreshUI();
         });
 
-        // --- GROUP toggles ---
+        // group toggles
         groups.forEach(g => {
             state.groupVisibility[String(g.group_id)] = true;
 
@@ -655,7 +653,7 @@ function getVisibleEvents() {
     });
 }
 
-// --- Monthly -----------------------------------------------------------------
+// Monthly 
 
 /**
  * Renders the monthly calendar grid. Builds day-name headers, empty offset
@@ -713,7 +711,7 @@ function renderMonthly() {
     }
 }
 
-// --- Weekly ------------------------------------------------------------------
+// Weekly
 
 /**
  * Renders the weekly calendar view. Shows a 7-column time grid from 7 AM to
@@ -797,7 +795,7 @@ function renderWeekly() {
     });
 }
 
-// --- Daily -------------------------------------------------------------------
+// Daily
 
 /**
  * Renders the daily calendar view. Shows a 2-column time grid (Time | Day)
@@ -879,7 +877,7 @@ function renderDaily() {
     });
 }
 
-// ─── Event Pill ───────────────────────────────────────────────────────────────
+// Event Pill
 
 /**
  * Creates a colored event pill element for display inside a calendar cell.
@@ -902,7 +900,7 @@ function makePill(ev, small = false) {
     return pill;
 }
 
-// ─── Upcoming Events Panel ────────────────────────────────────────────────────
+//Upcoming Events Panel
 
 /**
  * Rebuilds the Upcoming Events list in the sidebar with the next 5 events
@@ -941,7 +939,7 @@ function updateUpcomingEvents() {
     });
 }
 
-// ─── View Switching & Navigation ─────────────────────────────────────────────
+//View Switching & Navigation
 
 /**
  * Attaches click handlers to the Monthly, Weekly, and Daily view buttons.
@@ -996,7 +994,7 @@ function initNavigation() {
     });
 }
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// Helpers
 
 /**
  * Determines whether an event's details should be hidden from the current user.
@@ -1100,7 +1098,7 @@ function fmtHour(h) {
  */
 function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+// Init
 
 document.addEventListener('DOMContentLoaded', async () => {
 
