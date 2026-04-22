@@ -22,10 +22,56 @@ const API = 'api/events.php';
  */
 async function fetchEvents() {
     try {
+        // 1. personal events
         const res = await fetch(API);
-        if (!res.ok) return [];
-        return await res.json();
-    } catch {
+        const personalEvents = res.ok ? await res.json() : [];
+
+        // map by event_id
+        const eventMap = new Map();
+
+        personalEvents.forEach(ev => {
+            eventMap.set(ev.event_id, {
+                ...ev,
+                group_ids: [] // IMPORTANT
+            });
+        });
+
+        // 2. groups
+        const gRes = await fetch('api/groups.php');
+        const groups = await gRes.json();
+
+        // 3. group events
+        const groupEventPromises = groups.map(async g => {
+            const r = await fetch(`api/event_groups.php?group_id=${g.group_id}`);
+            const data = await r.json();
+            if (!data.success) return [];
+
+            return data.events.map(ev => ({
+                ...ev,
+                group_id: g.group_id
+            }));
+        });
+
+        const groupEvents = (await Promise.all(groupEventPromises)).flat();
+
+        // 4. merge into map
+        groupEvents.forEach(ev => {
+            if (eventMap.has(ev.event_id)) {
+                // already exists → just add group
+                eventMap.get(ev.event_id).group_ids.push(ev.group_id);
+            } else {
+                // event ONLY exists via group
+                eventMap.set(ev.event_id, {
+                    ...ev,
+                    group_ids: [ev.group_id]
+                });
+            }
+        });
+
+        return Array.from(eventMap.values());
+
+    } catch (err) {
+        console.error(err);
         return [];
     }
 }
@@ -111,7 +157,9 @@ let state = {
     month: new Date().getMonth(),
     view: 'monthly',
     selectedDate: todayStr(),
-    events: []   // in-memory cache of the DB rows (including expanded recurring instances)
+    events: [],
+    groupVisibility: {},   // { group_id: true/false }
+    showPersonal: true
 };
 
 // ─── Add-Event Modal ──────────────────────────────────────────────────────────
@@ -503,6 +551,91 @@ function renderCalendar() {
     else if (state.view === 'weekly') renderWeekly();
     else renderDaily();
 }
+/**
+ * Refreshes the ui
+ */
+function refreshUI() {
+    renderCalendar();
+    updateUpcomingEvents();
+}
+
+/**
+ * Applies filters onto the data
+ * 
+ */
+async function initGroupFilters() {
+    const container = document.getElementById('group-filters');
+
+    try {
+        const res = await fetch('api/groups.php');
+        const groups = await res.json();
+
+        container.innerHTML = '';
+
+        // --- PERSONAL toggle ---
+        const personalDiv = document.createElement('div');
+        personalDiv.innerHTML = `
+            <label>
+                <input type="checkbox" checked id="toggle-personal">
+                Personal
+            </label>
+        `;
+        container.appendChild(personalDiv);
+
+        document.getElementById('toggle-personal').addEventListener('change', (e) => {
+            state.showPersonal = e.target.checked;
+            refreshUI();
+        });
+
+        // --- GROUP toggles ---
+        groups.forEach(g => {
+            state.groupVisibility[String(g.group_id)] = true;
+
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <label>
+                    <input type="checkbox" checked data-group="${g.group_id}">
+                    ${g.group_name}
+                </label>
+            `;
+            container.appendChild(div);
+        });
+
+        // attach listeners
+        container.querySelectorAll('input[data-group]').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const gid = String(e.target.dataset.group);
+                state.groupVisibility[gid] = e.target.checked;
+                refreshUI();
+            });
+        });
+
+    } catch (err) {
+        container.innerHTML = '<p>Error loading groups</p>';
+    }
+}
+
+/**
+ * applies filter logic
+ * 
+ * @returns 
+ */
+function getVisibleEvents() {
+    return state.events.filter(ev => {
+
+        const hasGroups = ev.group_ids && ev.group_ids.length > 0;
+
+        // PERSONAL
+        if (!hasGroups) {
+            return state.showPersonal;
+        }
+
+        // GROUP → show if ANY enabled
+        return ev.group_ids.some(gid =>
+            state.groupVisibility[String(gid)] !== false
+        );
+    });
+}
 
 // --- Monthly -----------------------------------------------------------------
 
@@ -513,7 +646,8 @@ function renderCalendar() {
  * @returns {void}
  */
 function renderMonthly() {
-    const { year, month, events } = state;
+    const { year, month } = state;
+    const events = getVisibleEvents();
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const today = new Date();
@@ -570,7 +704,8 @@ function renderMonthly() {
  * @returns {void}
  */
 function renderWeekly() {
-    const { year, month, events } = state;
+    const { year, month } = state;
+    const events = getVisibleEvents();
     const today = new Date();
     const anchor = new Date(year, month, 1);
     const ref = (today.getFullYear() === year && today.getMonth() === month) ? today : anchor;
@@ -653,7 +788,7 @@ function renderWeekly() {
  * @returns {void}
  */
 function renderDaily() {
-    const { events } = state;
+    const events = getVisibleEvents();
     const target = new Date(state.selectedDate + 'T12:00:00');
     const y = target.getFullYear(), m = target.getMonth(), d = target.getDate();
     const now = new Date();
@@ -1009,6 +1144,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initViewSwitcher();
     initNavigation();
+
+    await initGroupFilters();
 
     renderCalendar();
     updateUpcomingEvents();

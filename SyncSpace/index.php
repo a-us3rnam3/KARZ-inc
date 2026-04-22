@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Date: 2026-03-31
  * Description: Main dashboard page for SyncSpace. Requires an authenticated
@@ -77,6 +78,12 @@ $initials = strtoupper(substr($username, 0, 1));
                     <li><a href="#">Compare Schedules</a></li>
                     <li><a href="#" id="open-free-time">Find Free Time</a></li>
                 </ul>
+            </section>
+            <section class="sidebar-card">
+                <h2>Filter Events</h2>
+
+                <div id="group-filters">
+                </div>
             </section>
         </aside>
 
@@ -373,24 +380,24 @@ $initials = strtoupper(substr($username, 0, 1));
     </div>
 
     <script>
-    const CURRENT_USER_ID = <?= (int)$_SESSION['user_id'] ?>;
-    const CURRENT_USERNAME = <?= json_encode($_SESSION['username']) ?>;
+        const CURRENT_USER_ID = <?= (int)$_SESSION['user_id'] ?>;
+        const CURRENT_USERNAME = <?= json_encode($_SESSION['username']) ?>;
 
-    document.addEventListener('DOMContentLoaded', () => {
-        const profileMenu = document.querySelector('.profile-menu');
-        const profileToggle = document.getElementById('profile-toggle');
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileMenu = document.querySelector('.profile-menu');
+            const profileToggle = document.getElementById('profile-toggle');
 
-        profileToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profileMenu.classList.toggle('open');
+            profileToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                profileMenu.classList.toggle('open');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!profileMenu.contains(e.target)) {
+                    profileMenu.classList.remove('open');
+                }
+            });
         });
-
-        document.addEventListener('click', (e) => {
-            if (!profileMenu.contains(e.target)) {
-                profileMenu.classList.remove('open');
-            }
-        });
-    });
     </script>
     <script src="js/events.js"></script>
 

@@ -38,7 +38,7 @@ try {
 
         $group_id = (int) $_GET['group_id'];
 
-        // 🔒 AUTH CHECK — must be group member
+        //AUTH CHECK — must be group member
         $stmt = $pdo->prepare("
         SELECT 1 
         FROM group_members 
@@ -218,6 +218,6 @@ try {
 } catch (PDOException $e) {
     echo json_encode([
         "success" => false,
-        "message" => "Database error" // safer for production
+        "message" => "Database error"
     ]);
 }
