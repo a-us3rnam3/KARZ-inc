@@ -319,3 +319,22 @@ async function leaveGroup() {
 
 // Init
 loadGroups();
+
+// Profile Dropdown
+document.addEventListener('DOMContentLoaded', () => {
+    const profileMenu = document.querySelector('.profile-menu');
+    const profileToggle = document.getElementById('profile-toggle');
+
+    if (profileMenu && profileToggle) {
+        profileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!profileMenu.contains(e.target)) {
+                profileMenu.classList.remove('open');
+            }
+        });
+    }
+});
